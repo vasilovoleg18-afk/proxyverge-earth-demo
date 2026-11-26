@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Шесть интерактивных 3D-вариантов Земли для ProxyVerge в светлой и тёмной теме."><meta name="color-scheme" content="light"><title>ProxyVerge · 3D Earth Demo</title>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Семь интерактивных 3D-вариантов Земли для ProxyVerge в светлой и тёмной теме."><meta name="color-scheme" content="light"><title>ProxyVerge · 3D Earth Demo</title>
 <style>
 *{box-sizing:border-box}
 html{color-scheme:light}
@@ -50,6 +50,9 @@ h1 b{color:#2563eb}
     <section data-variant="Ночная сеть" data-mode="5" hidden>
       <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
     </section>
+    <section data-variant="Земля с ночной сетью" data-mode="6" hidden>
+      <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
+    </section>
   </div>
   <p class="pv-status" role="status">Загружается 3D-глобус…</p>
 </div>
@@ -64,7 +67,10 @@ h1 b{color:#2563eb}
   let mode=0,ready=false,visible=true;
   let time=0,angle=0,tilt=-0.16,lastFrame=0,lastTick=0,drag=null;
   let targets={x:0,y:0},parallax={x:0,y:0};
-  const keys=['natural','atmosphere','day-night','clouds','network','night-network'];
+  const keys=['natural','atmosphere','day-night','clouds','network','night-network','earth-night-routes'];
+  const hybridMode=6;
+  const earthStyle=()=>mode===hybridMode?2:mode;
+  const routeStyle=()=>mode===hybridMode?5:mode;
   const picker=root.querySelector('.pv-modes');
   const initialIndex=Math.max(0,keys.indexOf(location.hash.slice(1)));
   sections.forEach((section,index)=>{
@@ -322,31 +328,33 @@ h1 b{color:#2563eb}
     [[-12,28],[95,19],[-69,28]],
     [[18,48],[114,26],[-72,41]]
   ];
-  const cursor=presets.map(()=>0);
+  const cursor=sections.map(()=>0);
   const colors=[['#81bdff','#a9d3ff'],['#ffbc57','#ffd37a'],['#ee99ff','#f5b3ff'],['#60e8aa','#7dffc1'],['#45dedb','#76ffed'],['#8dfbe6','#9affeb']];
   let scene,sceneTime=0;
 
   function selectScene(){
+    const terrain=earthStyle();
+    const routing=routeStyle();
     const index=cursor[mode];
-    const node=cities[presets[mode][index]];
+    const node=cities[presets[routing][index]];
     const hub=node.point;
     const others=Object.values(cities).filter(city=>city!==node).map(city=>city.point);
-    const [lon,lat]=focus[mode][index];
+    const [lon,lat]=focus[terrain][index];
     angle=lon*Math.PI/180;
-    tilt=-lat*Math.PI/180+(mode===1?.23:0);
+    tilt=-lat*Math.PI/180+(terrain===1?.23:0);
     targets={x:0,y:0};
     parallax={x:0,y:0};
     sceneTime=0;
     scene={node};
-    if(mode===0){
+    if(routing===0){
       scene.routes=others.map((point,i)=>arc(hub,point,.07+(i%4)*.031));
       const destinations=[['mad','gru','yyz'],['ist','nyc','dxb'],['bom','syd','tyo']][index];
       scene.featured=destinations.map((key,i)=>arc(hub,cities[key].point,.15+i*.03));
-    }else if(mode===1){
+    }else if(routing===1){
       scene.rings=[ring(1.14,.45,.5),ring(1.24,.96,1.42)];
       const pool=[['ist','bom','fra','sin','jnb'],['mad','nyc','dxb','hel','bom'],['hkg','syd','sin','lax','bom']][index];
       scene.routes=pool.map((key,i)=>arc(hub,cities[key].point,.18+i*.025));
-    }else if(mode===2){
+    }else if(routing===2){
       const fork=[['nyc','jnb'],['mad','sin'],['lax','mad']][index];
       const ends=[[['chi','lax','gru'],['ist','dxb','bom']],
         [['par','nyc','gru'],['hkg','syd','tyo']],
@@ -355,7 +363,7 @@ h1 b{color:#2563eb}
         const junction=cities[key].point;
         return {junction,trunk:arc(hub,junction,.11),twigs:ends[i].map(end=>arc(junction,cities[end].point,.035))};
       });
-    }else if(mode===3){
+    }else if(routing===3){
       const ends=[['tyo','hkg',[-156,20]],['hel','dxb',[47,16]],['tyo','syd',[127,-15]]][index];
       const primary=cities[ends[0]].point;
       const fallback=cities[ends[1]].point;
@@ -366,7 +374,7 @@ h1 b{color:#2563eb}
       const regional=[['lax','tyo','syd','sin','hkg'],['ist','hel','fra','jnb','bom'],['sin','tyo','hkg','syd','bom']][index];
       scene.guides=regional.map(key=>cities[key].point).filter(point=>point!==fallback)
         .map(point=>arc(fallback,point,.035,{elbow:true}));
-    }else if(mode===4){
+    }else if(routing===4){
       const nodes=[['mad','fra','dxb'],['dxb','sin','tyo'],['chi','nyc','mad']][index].map(key=>cities[key].point);
       scene.chain=[arc(nodes[0],nodes[1],.026),arc(nodes[1],nodes[2],.026)];
       scene.points=nodes;
@@ -379,20 +387,21 @@ h1 b{color:#2563eb}
     root.dataset.node=node.name;
   }
   function nextProxy(){
-    cursor[mode]=(cursor[mode]+1)%presets[mode].length;
+    cursor[mode]=(cursor[mode]+1)%presets[routeStyle()].length;
     selectScene();
     draw();
   }
 
-  function drawRoutes(r,width,height,yaw,pitch,scale){
+  function drawRoutes(r,width,height,yaw,pitch,scale,terrain){
     const c=r.context;
     if(!c)return;
     c.clearRect(0,0,width,height);
     const dark=r.theme==='dark';
-    const accent=colors[mode][Number(dark)];
-    const zoom=(mode===5?1.54:mode===1?2.24:2.64)/Math.min(1,width/height*1.12);
+    const routing=routeStyle();
+    const accent=colors[routing][Number(dark)];
+    const zoom=(terrain===5?1.54:terrain===1?2.24:2.64)/Math.min(1,width/height*1.12);
     const radius=height/zoom;
-    const centerY=height*(mode===5?.605:.5);
+    const centerY=height*(terrain===5?.605:.5);
     const cosYaw=Math.cos(yaw),sinYaw=Math.sin(yaw);
     const cosPitch=Math.cos(pitch),sinPitch=Math.sin(pitch);
     function project([vx,vy,vz]){
@@ -457,7 +466,7 @@ h1 b{color:#2563eb}
     }
     const phase=(rate,shift=0)=>.06+.88*((sceneTime*rate+shift)%1);
     const base='rgba(5,20,36,.73)';
-    if(mode===0){
+    if(routing===0){
       stroke(scene.routes,dark?'#79b3ff62':'#4283df82',1.05);
       stroke(scene.featured,base,6.5);
       stroke(scene.featured,accent,3.15);
@@ -466,7 +475,7 @@ h1 b{color:#2563eb}
         mark(route,phase(.23,i*.27), '#ffffff','triangle',4.2);
       });
       for(const route of scene.routes)dot(project(route.curve(1)),1.9,accent);
-    }else if(mode===1){
+    }else if(routing===1){
       const band=dark?'#f8ba6485':'#bb6b3190';
       scene.rings.forEach((route,i)=>{
         stroke([route],band,i?2.1:1.55,i?[2,6]:[19,7],-sceneTime*13);
@@ -478,7 +487,7 @@ h1 b{color:#2563eb}
       stroke([selected],accent,2.7,[8,4],-sceneTime*18);
       mark(selected,.7,accent,'diamond',6.5);
       mark(selected,phase(.43), '#fff6da','diamond',5.4);
-    }else if(mode===2){
+    }else if(routing===2){
       const branches=[dark?'#ffabd2':'#ff8fc1',dark?'#c6aefa':'#b19afa'];
       scene.branches.forEach(({junction,trunk,twigs},i)=>{
         const tint=branches[i];
@@ -491,7 +500,7 @@ h1 b{color:#2563eb}
         mark(trunk,phase(.22,i*.2), '#ffffff','chevrons',6.6);
         twigs.forEach((route,j)=>mark(route,phase(.19,j*.2),tint,'chevrons',4.3));
       });
-    }else if(mode===3){
+    }else if(routing===3){
       const failed=sceneTime%5.7>1.6;
       const coral=dark?'#ff9c88':'#ff8a78';
       stroke(scene.guides,dark?'#87d7af75':'#38a77f80',1.3,[1,4]);
@@ -513,7 +522,7 @@ h1 b{color:#2563eb}
         c.moveTo(x+d,y-d);c.lineTo(x-d,y+d);
         c.lineWidth=1.8*scale;c.strokeStyle=coral;c.stroke();
       }
-    }else if(mode===4){
+    }else if(routing===4){
       stroke(mesh,dark?'#6eecdd69':'#40b5bdb0',.95);
       for(const city of Object.values(cities))dot(project(city.point),2.1,accent);
       stroke(scene.chain,base,6.3);
@@ -556,14 +565,15 @@ h1 b{color:#2563eb}
   }
   function draw(){
     if(!ready||!visible||document.hidden)return;
+    const terrain=earthStyle();
     const yaw=angle+parallax.x*.08;
-    const pitch=tilt+parallax.y*.07+(mode===1?-.23:0);
+    const pitch=tilt+parallax.y*.07+(terrain===1?-.23:0);
     for(const r of renderers){
       const parent=r.canvas.parentElement;if(!parent)continue;
       const width=parent.clientWidth,height=parent.clientHeight;if(!width||!height)continue;
       const dpr=Math.min(devicePixelRatio||1,1.5);const w=Math.round(width*dpr),h=Math.round(height*dpr);
       if(r.canvas.width!==w||r.canvas.height!==h){r.canvas.width=w;r.canvas.height=h;r.overlay.width=w;r.overlay.height=h;}
-      const {gl,uniforms:u}=r;gl.viewport(0,0,w,h);gl.useProgram(r.program);gl.uniform1f(u.uAspect,w/h);gl.uniform1f(u.uAngle,yaw);gl.uniform1f(u.uPitch,pitch);gl.uniform1f(u.uTime,time);gl.uniform1f(u.uMode,mode);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,0,6);drawRoutes(r,w,h,yaw,pitch,dpr);
+      const {gl,uniforms:u}=r;gl.viewport(0,0,w,h);gl.useProgram(r.program);gl.uniform1f(u.uAspect,w/h);gl.uniform1f(u.uAngle,yaw);gl.uniform1f(u.uPitch,pitch);gl.uniform1f(u.uTime,time);gl.uniform1f(u.uMode,terrain);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,0,6);drawRoutes(r,w,h,yaw,pitch,dpr,terrain);
     }
   }
   function tick(now){
