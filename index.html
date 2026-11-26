@@ -384,47 +384,6 @@ h1 b{color:#2563eb}
     draw();
   }
 
-  function drawProxyLabel(c,point,width,height,scale,accent){
-    const detail='Прокси · '+scene.node.name;
-    const titleFont='700 '+(13*scale)+'px system-ui';
-    const detailFont='500 '+(10.5*scale)+'px system-ui';
-    c.font=detailFont;
-    const boxWidth=Math.max(80*scale,c.measureText(detail).width)+20*scale;
-    const boxHeight=38*scale;
-    const margin=12*scale;
-    let x=margin,y=height-boxHeight-margin;
-    if(point){
-      x=point[0]+boxWidth+18*scale<width-margin?point[0]+18*scale:point[0]-boxWidth-18*scale;
-      x=Math.max(margin,Math.min(width-boxWidth-margin,x));
-      y=Math.max(42*scale,Math.min(height-boxHeight-margin,point[1]-boxHeight-7*scale));
-      c.beginPath();
-      c.moveTo(...point);
-      c.lineTo(x>point[0]?x:x+boxWidth,y+boxHeight*.73);
-      c.strokeStyle=accent;
-      c.lineWidth=1.05*scale;
-      c.stroke();
-    }
-    c.beginPath();
-    c.roundRect(x,y,boxWidth,boxHeight,7*scale);
-    c.fillStyle='#0b1f38';
-    c.fill();
-    c.strokeStyle=point?accent:'#42678e';
-    c.lineWidth=scale;
-    c.stroke();
-    c.font=titleFont;
-    const titleX=x+10*scale,titleY=y+15*scale;
-    c.fillStyle='#f5f9ff';
-    c.fillText('Proxy',titleX,titleY);
-    const vX=titleX+c.measureText('Proxy').width;
-    c.fillStyle='#74adff';
-    c.fillText('V',vX,titleY);
-    c.fillStyle='#f5f9ff';
-    c.fillText('erge',vX+c.measureText('V').width,titleY);
-    c.font=detailFont;
-    c.fillStyle='#cce0f7';
-    c.fillText(detail,titleX,y+29*scale);
-  }
-
   function drawRoutes(r,width,height,yaw,pitch,scale){
     const c=r.context;
     if(!c)return;
@@ -592,7 +551,6 @@ h1 b{color:#2563eb}
       });
     }
     const selected=project(scene.node.point);
-    drawProxyLabel(c,selected,width,height,scale,accent);
     dot(selected,7.3,'#09223a');
     dot(selected,4.8,accent);
   }
