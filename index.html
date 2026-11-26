@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Пять интерактивных 3D-вариантов Земли для ProxyVerge. Сравнение светлой и тёмной темы."><meta name="color-scheme" content="light"><title>ProxyVerge · 3D Earth Demo</title>
+<style>
+*{box-sizing:border-box}html{color-scheme:light}body{margin:0;background:#edf1f7;color:#16243a;font-family:Inter,Arial,sans-serif;font-size:16px;line-height:1.5}main{max-width:1240px;margin:auto;padding:30px 24px 24px}header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:25px}.brand{font-size:27px;font-weight:750;letter-spacing:-1px}.brand b{color:#2563eb}.kicker{font-size:14px;color:#536680;margin:5px 0 0}h1{font-size:23px;font-weight:600;line-height:1.3;margin:0 0 8px}.intro{max-width:580px;color:#536680;font-size:15px;margin:0}button,input{font:inherit}button{cursor:pointer}button:focus-visible,canvas:focus-visible{outline:3px solid #3b82f6;outline-offset:3px}footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:20px;color:#617188;font-size:13px}footer a{color:inherit}#pv-earth-live{--pv-text:#182439;--pv-muted:#53647b;--pv-control:#e0e8f4}#pv-earth-live .pv-modes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}#pv-earth-live .pv-modes button{border:1px solid #cbd5e3;border-radius:9px;background:#fff;color:#33465e;padding:10px 15px;min-height:44px}#pv-earth-live .pv-modes button[aria-pressed="true"]{background:#1f5de7;color:white;border-color:#1f5de7}#pv-earth-live .pv-toolbar{padding-right:0;gap:18px;margin-bottom:18px}#pv-earth-live .pv-speed{display:flex;align-items:center;gap:10px;font-size:14px}#pv-earth-live .pv-speed input{width:100px;accent-color:#2563eb}#pv-earth-live .pv-speed output{min-width:35px;font-variant-numeric:tabular-nums}#pv-earth-live .pv-reset{border:0;background:transparent;color:#35547b;padding:9px 5px;min-height:42px}#pv-earth-live .pv-scene{height:460px}#pv-earth-live .pv-pair{border-radius:14px;overflow:hidden}#pv-earth-live .pv-caption{font-size:15px;min-height:24px}#pv-earth-live .pv-status{font-size:14px}
+@media(max-width:760px){main{padding:20px 14px}header{display:block}.brand{margin-bottom:18px}h1{font-size:21px}#pv-earth-live .pv-modes{gap:6px}#pv-earth-live .pv-modes button{padding:9px 12px;font-size:14px}#pv-earth-live .pv-toolbar{gap:10px}#pv-earth-live .pv-speed input{width:80px}}
+@media(max-width:680px){#pv-earth-live .pv-scene{height:330px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+</style></head><body><main><header><div><div class="brand">Proxy<b>V</b>erge</div><p class="kicker">3D Earth Demo</p></div><div><h1>Выберите, как будет выглядеть Земля</h1><p class="intro">Пять живых вариантов. Перетаскивайте планету мышью или пальцем. Для управления с клавиатуры выберите планету и используйте стрелки.</p></div></header><div id="pv-earth-live">
+  <nav class="pv-modes" aria-label="Варианты Земли"></nav><div class="pv-toolbar">
+    <button type="button" class="pv-pause">Пауза</button>
+    <label class="pv-speed">Скорость <input type="range" min="0.3" max="2" value="1" step="0.1" aria-label="Скорость вращения"><output>1×</output></label><button type="button" class="pv-reset">Сбросить ракурс</button>
+    <span class="pv-status" role="status">Загружаются текстуры Земли…</span>
+  </div>
+  <div class="viz-carousel" aria-label="Варианты живой Земли" data-previous-label="Предыдущий" data-next-label="Следующий">
+    <section data-variant="Дневная Земля" data-mode="0">
+      <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
+    </section>
+    <section data-variant="Тонкая атмосфера" data-mode="1" hidden>
+      <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
+    </section>
+    <section data-variant="День и ночь" data-mode="2" hidden>
+      <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
+    </section>
+    <section data-variant="Объёмные облака" data-mode="3" hidden>
+      <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
+    </section>
+    <section data-variant="Три маршрута" data-mode="4" hidden>
+      <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
+    </section>
+  </div>
+  <div class="pv-caption" aria-live="polite">Естественные цвета, боковое освещение и медленное вращение.</div>
+</div>
+<style>
+#pv-earth-live{--pv-text:light-dark(#182439,#e4ebf6);--pv-muted:light-dark(#53647b,#a4b4cb);--pv-control:light-dark(#eaf0f8,#1c2a40);font-family:Inter,system-ui,sans-serif;color:var(--pv-text)}
+#pv-earth-live .pv-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:12px;padding-right:94px}
+#pv-earth-live .pv-pause{font:inherit;color:var(--pv-text);background:var(--pv-control);border:0;border-radius:7px;padding:9px 17px;min-height:42px}
+#pv-earth-live .pv-hint,#pv-earth-live .pv-status,#pv-earth-live .pv-caption{color:var(--pv-muted)}
+#pv-earth-live .pv-status:empty{display:none}
+#pv-earth-live .pv-pair{display:grid;grid-template-columns:1fr 1fr;gap:0}
+#pv-earth-live .pv-scene{position:relative;min-width:0;height:390px;overflow:hidden;isolation:isolate}
+#pv-earth-live .pv-light{background:#f6f8fc;color:#26374e}
+#pv-earth-live .pv-dark{background:#080f1e;color:#c3cee0}
+#pv-earth-live .pv-scene>span{position:absolute;left:18px;top:14px;z-index:2;font-weight:500;pointer-events:none}
+#pv-earth-live canvas{display:block;position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}
+#pv-earth-live .pv-route{pointer-events:none;z-index:1}
+#pv-earth-live .pv-caption{margin-top:12px}
+@media(max-width:680px){#pv-earth-live .pv-pair{grid-template-columns:1fr}#pv-earth-live .pv-scene{height:320px}#pv-earth-live .pv-toolbar{padding-right:0}}
+</style>
+<script>
+(() => {
+  const root=document.getElementById('pv-earth-live');
+  const carousel=root.querySelector('.viz-carousel');
+  const sections=Array.from(carousel.querySelectorAll(':scope > section'));
+  const status=root.querySelector('.pv-status');
+  const pauseButton=root.querySelector('.pv-pause');
+  const caption=root.querySelector('.pv-caption');
+  const descriptions=[
+    'Естественные цвета, боковое освещение и медленное вращение.',
+    'Более близкий ракурс, наклонённая ось и тонкая воздушная кромка.',
+    'Граница дня и ночи. Огни городов появляются на теневой стороне.',
+    'Приподнятый облачный слой с собственным движением и тенями.',
+    'Три пространственные дуги. Маршруты вращаются вместе с географией.'
+  ];
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const settings={speed:1,playing:!reduced.matches};
+  let mode=0,active=sections[0],ready=false,visible=true;
+  let time=0,angle=0,tilt=-0.16,lastFrame=0,lastTick=0,drag=null;
+  let targets={x:0,y:0},parallax={x:0,y:0};
+  const keys=['natural','atmosphere','day-night','clouds','network'];
+  const picker=root.querySelector('.pv-modes');
+  const initialIndex=Math.max(0,keys.indexOf(location.hash.slice(1)));
+  sections.forEach((section,index)=>{
+    section.hidden=index!==initialIndex;
+    const button=document.createElement('button');button.type='button';button.textContent=section.dataset.variant;
+    button.setAttribute('aria-pressed',String(index===initialIndex));
+    button.addEventListener('click',()=>{sections.forEach((s,i)=>s.hidden=i!==index);Array.from(picker.children).forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));history.replaceState(null,'','#'+keys[index]);});
+    picker.append(button);
+  });
+  const speedInput=root.querySelector('.pv-speed input');
+  speedInput.addEventListener('input',()=>{settings.speed=Number(speedInput.value);root.querySelector('.pv-speed output').value=settings.speed.toFixed(1).replace('.0','')+'×';});
+  root.querySelector('.pv-reset').addEventListener('click',()=>{angle=0;tilt=-.16;targets={x:0,y:0};parallax={x:0,y:0};draw();});
+  const vertex='attribute vec2 aPosition;varying vec2 vUv;void main(){vUv=aPosition*.5+.5;gl_Position=vec4(aPosition,0.,1.);}';
+  const fragment=`precision highp float;
+    varying vec2 vUv;
+    uniform sampler2D uDay,uCloud,uNight;
+    uniform float uAngle,uTime,uPitch,uAspect,uMode;
+    const float PI=3.14159265359;
+    vec3 rx(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(p.x,c*p.y-s*p.z,s*p.y+c*p.z);}
+    vec3 ry(vec3 p,float a){float c=cos(a),s=sin(a);return vec3(c*p.x+s*p.z,p.y,-s*p.x+c*p.z);}
+    vec3 world(vec3 p,float a){return ry(rx(p,uPitch),a);}
+    vec2 uv(vec3 p){p=normalize(p);return vec2(fract(atan(p.x,p.z)/(2.*PI)+.5),asin(clamp(p.y,-1.,1.))/PI+.5);}
+    float cloudAt(vec2 p){vec4 cloud=texture2D(uCloud,vec2(fract(p.x),clamp(p.y,0.,1.)));return cloud.r*cloud.a;}
+    void main(){
+      float zoom=uMode==1.?2.24:2.64;
+      vec2 p=(vUv-.5)*vec2(uAspect,1.)*zoom;
+      float rr=dot(p,p),d=sqrt(rr);
+      vec3 sun=normalize(vec3(-.72,.50,1.35));
+      if(uMode==1.)sun=normalize(vec3(-1.1,.35,.70));
+      if(uMode==2.)sun=normalize(vec3(-1.,.22,.10));
+      vec3 air=vec3(.15,.47,.87);
+      float airStrength=uMode==1.?.32:.09;
+      if(rr>1.){
+        float edge=exp(-(d-1.)*(uMode==1.?55.:85.));
+        float side=.32+.68*max(0.,dot(normalize(vec3(p,.05)),sun));
+        gl_FragColor=vec4(air,edge*side*airStrength);
+        return;
+      }
+      vec3 n=vec3(p,sqrt(max(0.,1.-rr)));
+      vec2 texUv=uv(world(n,uAngle));
+      vec3 albedo=pow(texture2D(uDay,texUv).rgb,vec3(2.2));
+      float light=dot(n,sun);
+      float ambient=uMode==2.?.035:.16;
+      vec3 color=albedo*(ambient+1.12*max(light,0.));
+      vec3 viewDirection=vec3(0.,0.,1.);
+      float water=clamp((albedo.b-albedo.r*1.3)*9.,0.,1.);
+      float spec=pow(max(0.,dot(reflect(-sun,n),viewDirection)),42.);
+      color+=vec3(.60,.72,.89)*spec*water*.15;
+      float shellRadius=uMode==3.?1.035:1.012;
+      vec3 cn=normalize(vec3(p,sqrt(max(0.,shellRadius*shellRadius-rr))));
+      vec2 cloudUv=uv(world(cn,uAngle+uTime*(uMode==3.?.009:.003)));
+      float cloud=cloudAt(cloudUv);
+      cloud=smoothstep(.12,.86,cloud)*(uMode==3.?.92:.32);
+      float shadow=cloudAt(texUv+vec2(.006,-.004)+vec2(uTime*(uMode==3.?.009:.003)/(2.*PI),0.));
+      color*=1.-shadow*(uMode==3.?.24:.06)*max(light,0.);
+      vec3 clouds=vec3(.94,.97,1.)*(ambient+1.05*max(dot(cn,sun),0.));
+      color=mix(color,clouds,cloud);
+      if(uMode==2.){
+        vec3 city=texture2D(uNight,texUv).rgb;
+        float night=1.-smoothstep(-.15,.10,light);
+        color+=pow(city,vec3(1.5))*vec3(1.35,.95,.58)*night*1.6;
+      }
+      float rim=pow(1.-n.z,3.8)*smoothstep(-.30,.65,light);
+      color+=air*rim*(uMode==1.?.55:.14);
+      gl_FragColor=vec4(pow(max(color,vec3(0.)),vec3(1./2.2)),1.-smoothstep(.993,1.,rr));
+    }`;
+  function makeRenderer(theme){
+    const canvas=document.createElement('canvas');
+    canvas.setAttribute('role','img');canvas.tabIndex=0;canvas.setAttribute('aria-keyshortcuts','ArrowLeft ArrowRight ArrowUp ArrowDown');canvas.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft')angle-=.10;if(e.key==='ArrowRight')angle+=.10;if(e.key==='ArrowUp')tilt=Math.max(-.75,tilt-.08);if(e.key==='ArrowDown')tilt=Math.min(.65,tilt+.08);draw();});
+    canvas.setAttribute('aria-label','Вращающаяся трёхмерная Земля. '+(theme==='light'?'Светлая':'Тёмная')+' тема.');
+    const overlay=document.createElement('canvas');overlay.className='pv-route';overlay.setAttribute('aria-hidden','true');
+    const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false,preserveDrawingBuffer:true});
+    if(!gl)throw Error('Браузер не предоставил WebGL для живого 3D-превью.');
+    function shader(type,source){const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw Error(gl.getShaderInfoLog(s));return s;}
+    const program=gl.createProgram();gl.attachShader(program,shader(gl.VERTEX_SHADER,vertex));gl.attachShader(program,shader(gl.FRAGMENT_SHADER,fragment));gl.linkProgram(program);
+    if(!gl.getProgramParameter(program,gl.LINK_STATUS))throw Error(gl.getProgramInfoLog(program));
+    gl.useProgram(program);
+    const buffer=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,buffer);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]),gl.STATIC_DRAW);
+    const location=gl.getAttribLocation(program,'aPosition');gl.enableVertexAttribArray(location);gl.vertexAttribPointer(location,2,gl.FLOAT,false,0,0);
+    const uniforms={};for(const key of ['uDay','uCloud','uNight','uAngle','uTime','uPitch','uAspect','uMode'])uniforms[key]=gl.getUniformLocation(program,key);
+    const context=overlay.getContext('2d');
+    const renderer={theme,canvas,overlay,gl,program,uniforms,context};
+    canvas.addEventListener('pointerdown',e=>{drag={id:e.pointerId,x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);});
+    canvas.addEventListener('pointermove',e=>{
+      if(drag&&drag.id===e.pointerId){angle+=(e.clientX-drag.x)*.009;tilt=Math.max(-.75,Math.min(.65,tilt+(e.clientY-drag.y)*.006));drag.x=e.clientX;drag.y=e.clientY;}
+      else if(e.pointerType==='mouse'&&!reduced.matches){const r=canvas.getBoundingClientRect();targets={x:(e.clientX-r.left)/r.width-.5,y:(e.clientY-r.top)/r.height-.5};}
+    });
+    canvas.addEventListener('pointerup',()=>drag=null);canvas.addEventListener('pointercancel',()=>drag=null);canvas.addEventListener('pointerleave',()=>{targets={x:0,y:0};});
+    return renderer;
+  }
+  const renderers=[];
+  function syncActive(){
+    const next=sections.find(s=>!s.hidden);if(!next)return;
+    active=next;mode=Number(next.dataset.mode);caption.textContent=descriptions[mode];
+    for(const r of renderers){const target=next.querySelector('[data-theme="'+r.theme+'"]');if(r.canvas.parentElement!==target){target.append(r.canvas,r.overlay);}}
+    draw();
+  }
+  function updatePlay(){pauseButton.textContent=settings.playing?'Пауза':'Продолжить';pauseButton.setAttribute('aria-pressed',String(!settings.playing));}
+  pauseButton.addEventListener('click',()=>{settings.playing=!settings.playing;updatePlay();draw();});
+  reduced.addEventListener('change',e=>{if(e.matches){settings.playing=false;updatePlay();}});
+  function vector(lon,lat){lon*=Math.PI/180;lat*=Math.PI/180;return [Math.cos(lat)*Math.sin(lon),Math.sin(lat),Math.cos(lat)*Math.cos(lon)];}
+  const routePairs=[[[ -74,40.7],[-.12,51.5]],[[-.12,51.5],[103.8,1.35]],[[-46.6,-23.5],[-9.14,38.72]]];
+  const routes=routePairs.map(pair=>{const a=vector(...pair[0]),b=vector(...pair[1]);const omega=Math.acos(Math.min(1,a.reduce((s,v,i)=>s+v*b[i],0)));return {a,b,omega};});
+  function viewPoint(v,yaw,pitch){const c=Math.cos(yaw),s=Math.sin(yaw);const x=c*v[0]-s*v[2],z=s*v[0]+c*v[2];return [x,Math.cos(pitch)*v[1]+Math.sin(pitch)*z,-Math.sin(pitch)*v[1]+Math.cos(pitch)*z];}
+  function onArc(route,t){const {a,b,omega}=route;const v=a.map((x,i)=>(Math.sin((1-t)*omega)*x+Math.sin(t*omega)*b[i])/Math.sin(omega));const height=1.012+.20*Math.sin(Math.PI*t);return v.map(x=>x*height);}
+  function drawRoutes(r,width,height,yaw,pitch){
+    const c=r.context;c.clearRect(0,0,width,height);if(mode!==4)return;
+    const project=v=>{const p=viewPoint(v,yaw,pitch);const rr=p[0]*p[0]+p[1]*p[1];return {x:width/2+p[0]*height/2.64,y:height/2-p[1]*height/2.64,show:p[2]>0&&(rr>=1||p[2]>=Math.sqrt(1-rr)-.012)};};
+    c.lineWidth=Math.max(1,width/420)*1.05;c.strokeStyle=r.theme==='light'?'rgba(0,139,147,.85)':'rgba(66,213,204,.85)';
+    routes.forEach((route,index)=>{
+      c.beginPath();let connected=false;for(let i=0;i<=80;i++){const p=project(onArc(route,i/80));if(p.show){if(connected)c.lineTo(p.x,p.y);else c.moveTo(p.x,p.y);connected=true;}else connected=false;}c.stroke();
+      for(const t of [0,1,((time*.10+index*.31)%1)]){const p=project(onArc(route,t));if(!p.show)continue;c.beginPath();c.arc(p.x,p.y,t===0||t===1?2.5:2,0,Math.PI*2);c.fillStyle=r.theme==='light'?'#058c94':'#74e6d9';c.fill();}
+    });
+  }
+  function draw(){
+    if(!ready||!visible||document.hidden)return;
+    const yaw=angle+parallax.x*.08;
+    const pitch=tilt+parallax.y*.07+(mode===1?-.23:0);
+    for(const r of renderers){
+      const parent=r.canvas.parentElement;if(!parent)continue;
+      const width=parent.clientWidth,height=parent.clientHeight;if(!width||!height)continue;
+      const dpr=Math.min(devicePixelRatio||1,1.5);const w=Math.round(width*dpr),h=Math.round(height*dpr);
+      if(r.canvas.width!==w||r.canvas.height!==h){r.canvas.width=w;r.canvas.height=h;r.overlay.width=w;r.overlay.height=h;}
+      const {gl,uniforms:u}=r;gl.viewport(0,0,w,h);gl.useProgram(r.program);gl.uniform1f(u.uAspect,w/h);gl.uniform1f(u.uAngle,yaw);gl.uniform1f(u.uPitch,pitch);gl.uniform1f(u.uTime,time);gl.uniform1f(u.uMode,mode);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,0,6);drawRoutes(r,w,h,yaw,pitch);
+    }
+  }
+  function tick(now){
+    requestAnimationFrame(tick);if(!lastTick)lastTick=now;const dt=Math.min(.08,(now-lastTick)/1000);lastTick=now;
+    if(document.hidden||!visible)return;
+    if(settings.playing&&!drag){time+=dt*settings.speed;angle+=dt*.07*settings.speed;}
+    const moving=settings.playing||drag||Math.abs(targets.x-parallax.x)>.0001||Math.abs(targets.y-parallax.y)>.0001;
+    parallax.x+=(targets.x-parallax.x)*.06;parallax.y+=(targets.y-parallax.y)*.06;
+    if(moving&&now-lastFrame>=1000/30){lastFrame=now;draw();}
+  }
+  function image(url){return new Promise((resolve,reject)=>{const img=new Image();img.crossOrigin='anonymous';img.onload=()=>resolve(img);img.onerror=()=>reject(Error('Не удалось загрузить текстуру Земли.'));img.src=url;});}
+  const base='https://raw.githubusercontent.com/mrdoob/three.js/r160/examples/textures/planets/';
+  try{renderers.push(makeRenderer('light'),makeRenderer('dark'));syncActive();updatePlay();
+    Promise.all(['earth_atmos_2048.jpg','earth_clouds_1024.png','earth_lights_2048.png'].map(file=>image(base+file))).then(images=>{
+      for(const r of renderers){const {gl,uniforms:u}=r;gl.useProgram(r.program);images.forEach((img,i)=>{const texture=gl.createTexture();gl.activeTexture(gl.TEXTURE0+i);gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.uniform1i([u.uDay,u.uCloud,u.uNight][i],i);});}
+      ready=true;status.textContent='';root.dataset.ready='true';draw();requestAnimationFrame(tick);
+    }).catch(e=>{status.textContent=e.message;root.dataset.error=e.message;});
+  }catch(e){status.textContent=e.message;root.dataset.error=e.message;}
+  new MutationObserver(syncActive).observe(carousel,{subtree:true,attributes:true,attributeFilter:['hidden']});
+  new ResizeObserver(draw).observe(root);
+  new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible)draw();}).observe(root);
+  if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:()=>{updatePlay();draw();}});tweak.addSlider(settings,'speed',{label:'Скорость вращения',min:.3,max:2,step:.1});}
+})();
+</script>
+<footer><span>Светлая и тёмная темы вращаются синхронно.</span><a href="https://github.com/mrdoob/three.js/tree/r160/examples/textures/planets" target="_blank" rel="noopener noreferrer">Источник текстур Земли</a></footer></main></body></html>
