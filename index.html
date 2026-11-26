@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Пять интерактивных 3D-вариантов Земли для ProxyVerge. Сравнение светлой и тёмной темы."><meta name="color-scheme" content="light"><title>ProxyVerge · 3D Earth Demo</title>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Шесть интерактивных 3D-вариантов Земли для ProxyVerge в светлой и тёмной теме."><meta name="color-scheme" content="light"><title>ProxyVerge · 3D Earth Demo</title>
 <style>
 *{box-sizing:border-box}
 html{color-scheme:light}
@@ -47,6 +47,9 @@ h1 b{color:#2563eb}
     <section data-variant="Глобальная сеть" data-mode="4" hidden>
       <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
     </section>
+    <section data-variant="Ночная сеть" data-mode="5" hidden>
+      <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
+    </section>
   </div>
   <p class="pv-status" role="status">Загружается 3D-глобус…</p>
 </div>
@@ -61,7 +64,7 @@ h1 b{color:#2563eb}
   let mode=0,ready=false,visible=true;
   let time=0,angle=0,tilt=-0.16,lastFrame=0,lastTick=0,drag=null;
   let targets={x:0,y:0},parallax={x:0,y:0};
-  const keys=['natural','atmosphere','day-night','clouds','network'];
+  const keys=['natural','atmosphere','day-night','clouds','network','night-network'];
   const picker=root.querySelector('.pv-modes');
   const initialIndex=Math.max(0,keys.indexOf(location.hash.slice(1)));
   sections.forEach((section,index)=>{
@@ -83,14 +86,15 @@ h1 b{color:#2563eb}
     vec2 uv(vec3 p){p=normalize(p);return vec2(fract(atan(p.x,p.z)/(2.*PI)+.5),asin(clamp(p.y,-1.,1.))/PI+.5);}
     float cloudAt(vec2 p){vec4 cloud=texture2D(uCloud,vec2(fract(p.x),clamp(p.y,0.,1.)));return cloud.r*cloud.a;}
     void main(){
-      float zoom=(uMode==1.?2.24:2.64)/min(1.,uAspect*1.12);
-      vec2 p=(vUv-.5)*vec2(uAspect,1.)*zoom;
+      bool nightNetwork=uMode==5.;
+      float zoom=(nightNetwork?1.54:(uMode==1.?2.24:2.64))/min(1.,uAspect*1.12);
+      vec2 p=(vUv-.5+vec2(0.,nightNetwork?.105:0.))*vec2(uAspect,1.)*zoom;
       float rr=dot(p,p),d=sqrt(rr);
       vec3 sun=normalize(vec3(-.72,.50,1.35));
       if(uMode==1.)sun=normalize(vec3(-1.1,.35,.70));
       if(uMode==2.)sun=normalize(vec3(-1.,.22,.10));
-      vec3 air=vec3(.15,.47,.87);
-      float airStrength=uMode==1.?.32:.09;
+      vec3 air=nightNetwork?vec3(.15,.60,.60):vec3(.15,.47,.87);
+      float airStrength=nightNetwork?.22:(uMode==1.?.32:.09);
       if(rr>1.){
         float edge=exp(-(d-1.)*(uMode==1.?55.:85.));
         float side=.32+.68*max(0.,dot(normalize(vec3(p,.05)),sun));
@@ -99,6 +103,28 @@ h1 b{color:#2563eb}
       }
       vec3 n=vec3(p,sqrt(max(0.,1.-rr)));
       vec2 texUv=uv(world(n,uAngle));
+      if(nightNetwork){
+        vec3 surface=texture2D(uDay,texUv).rgb;
+        float land=1.-smoothstep(.025,.15,surface.b-max(surface.r,surface.g));
+        float tone=dot(surface,vec3(.28,.53,.19));
+        float relief=tone-dot(texture2D(uDay,texUv+vec2(.0008,.00065)).rgb,vec3(.28,.53,.19));
+        float shade=.26+.74*max(0.,dot(n,normalize(vec3(-.28,.94,.19))));
+        vec3 nightColor=mix(vec3(.013,.027,.036),vec3(.071,.109,.124),land)*(shade+.72*tone);
+        nightColor+=land*relief*vec3(.18,.23,.25);
+        vec3 lights=texture2D(uNight,texUv).rgb;
+        float brightness=max(lights.r,max(lights.g,lights.b));
+        float soft=pow(max(0.,brightness-.018),.92);
+        float halo=.5*(texture2D(uNight,texUv+vec2(.0012,.0008)).r+
+          texture2D(uNight,texUv-vec2(.0012,.0008)).r);
+        nightColor+=vec3(1.,.48,.12)*pow(halo,1.6)*.27;
+        nightColor+=vec3(1.,.63,.26)*soft*.93;
+        nightColor+=vec3(1.,.89,.66)*pow(brightness,2.75)*.40;
+        float haze=cloudAt(uv(world(n,uAngle+uTime*.003)));
+        nightColor+=vec3(.019,.031,.037)*haze*shade;
+        nightColor+=vec3(.045,.15,.16)*pow(1.-n.z,4.)*shade;
+        gl_FragColor=vec4(clamp(nightColor,0.,1.),1.-smoothstep(.991,1.,rr));
+        return;
+      }
       vec3 albedo=pow(texture2D(uDay,texUv).rgb,vec3(2.2));
       float light=dot(n,sun);
       float ambient=uMode==2.?.035:.16;
@@ -252,22 +278,52 @@ h1 b{color:#2563eb}
     const [from,to]=pair.split('-');
     return arc(cities[from].point,cities[to].point,.014,{segments:24});
   });
+  const nightHubs={
+    ...Object.fromEntries(Object.entries(cities).map(([key,city])=>[key,city.point])),
+    lon:vector(-.13,51.51),dub:vector(-6.26,53.34),osl:vector(10.75,59.91),
+    sto:vector(18.07,59.33),ber:vector(13.41,52.52),waw:vector(21.01,52.23),
+    vie:vector(16.37,48.21),rom:vector(12.49,41.90),ath:vector(23.73,37.98),
+    buh:vector(26.10,44.43),cai:vector(31.24,30.04),cas:vector(-7.59,33.57),
+    los:vector(3.38,6.52),nai:vector(36.82,-1.29),bei:vector(116.41,39.90),
+    sel:vector(126.98,37.57),tpe:vector(121.56,25.03),bkk:vector(100.5,13.75),
+    han:vector(105.83,21.03),mnl:vector(120.98,14.60),jkt:vector(106.85,-6.21),
+    bos:vector(-71.06,42.36),atl:vector(-84.39,33.75),mia:vector(-80.19,25.76),
+    dal:vector(-96.8,32.78),yul:vector(-73.57,45.50),mex:vector(-99.13,19.43)
+  };
+  const nightPairs=(
+    'lon-dub lon-par lon-ams lon-nyc lon-fra lon-mad lon-osl lon-yyz lon-waw '+
+    'ams-osl ams-ber ams-vie ams-mad dub-mad dub-nyc osl-sto osl-hel sto-hel sto-ber '+
+    'hel-waw ber-waw ber-fra ber-vie fra-waw fra-vie fra-rom fra-ist fra-cai fra-dxb '+
+    'par-fra par-mad par-rom par-cas mad-cas mad-los vie-rom vie-buh vie-ist '+
+    'waw-buh waw-ist rom-ath rom-buh rom-cai ath-buh ath-ist ath-cai buh-ist buh-cai '+
+    'ist-cai ist-dxb cai-cas cai-nai cas-los los-nai nai-jnb jnb-cai cai-dxb '+
+    'sin-bkk sin-han sin-jkt sin-hkg sin-syd bkk-hkg bkk-han han-bei hkg-tpe hkg-mnl '+
+    'hkg-bei bei-sel sel-tpe sel-tyo tpe-tyo tpe-mnl mnl-tyo mnl-jkt jkt-syd '+
+    'nyc-bos nyc-yyz nyc-yul nyc-chi nyc-atl nyc-mia chi-dal chi-yyz chi-lax '+
+    'bos-yul bos-lon yul-yyz atl-mia atl-dal mia-gru mia-mex dal-mex dal-lax lax-tyo'
+  ).split(' ');
+  const nightRoutes=nightPairs.map((pair,i)=>{
+    const [from,to]=pair.split('-');
+    return arc(nightHubs[from],nightHubs[to],.016+(i%6)*.018,{segments:26});
+  });
   const presets=[
     ['nyc','fra','sin'],
     ['dxb','fra','tyo'],
     ['mad','dxb','nyc'],
     ['lax','ist','sin'],
-    ['fra','sin','nyc']
+    ['fra','sin','nyc'],
+    ['fra','hkg','nyc']
   ];
   const focus=[
     [[-48,36],[15,35],[100,17]],
     [[45,18],[6,35],[121,27]],
     [[-16,22],[45,12],[-62,25]],
     [[-160,27],[28,28],[110,18]],
-    [[-12,28],[95,19],[-69,28]]
+    [[-12,28],[95,19],[-69,28]],
+    [[18,48],[114,26],[-72,41]]
   ];
-  const cursor=[0,0,0,0,0];
-  const colors=[['#81bdff','#a9d3ff'],['#ffbc57','#ffd37a'],['#ee99ff','#f5b3ff'],['#60e8aa','#7dffc1'],['#45dedb','#76ffed']];
+  const cursor=presets.map(()=>0);
+  const colors=[['#81bdff','#a9d3ff'],['#ffbc57','#ffd37a'],['#ee99ff','#f5b3ff'],['#60e8aa','#7dffc1'],['#45dedb','#76ffed'],['#8dfbe6','#9affeb']];
   let scene,sceneTime=0;
 
   function selectScene(){
@@ -310,10 +366,14 @@ h1 b{color:#2563eb}
       const regional=[['lax','tyo','syd','sin','hkg'],['ist','hel','fra','jnb','bom'],['sin','tyo','hkg','syd','bom']][index];
       scene.guides=regional.map(key=>cities[key].point).filter(point=>point!==fallback)
         .map(point=>arc(fallback,point,.035,{elbow:true}));
-    }else{
+    }else if(mode===4){
       const nodes=[['mad','fra','dxb'],['dxb','sin','tyo'],['chi','nyc','mad']][index].map(key=>cities[key].point);
       scene.chain=[arc(nodes[0],nodes[1],.026),arc(nodes[1],nodes[2],.026)];
       scene.points=nodes;
+    }else{
+      const wires=[['lon','mad','rom','ist','waw','cai'],['bei','tpe','sel','sin','tyo','han'],
+        ['yyz','bos','chi','mia','dal','lon']][index];
+      scene.featured=wires.map((key,i)=>arc(hub,nightHubs[key],.055+(i%3)*.044));
     }
     root.dataset.scene=keys[mode];
     root.dataset.node=node.name;
@@ -371,8 +431,9 @@ h1 b{color:#2563eb}
     c.clearRect(0,0,width,height);
     const dark=r.theme==='dark';
     const accent=colors[mode][Number(dark)];
-    const zoom=(mode===1?2.24:2.64)/Math.min(1,width/height*1.12);
+    const zoom=(mode===5?1.54:mode===1?2.24:2.64)/Math.min(1,width/height*1.12);
     const radius=height/zoom;
+    const centerY=height*(mode===5?.605:.5);
     const cosYaw=Math.cos(yaw),sinYaw=Math.sin(yaw);
     const cosPitch=Math.cos(pitch),sinPitch=Math.sin(pitch);
     function project([vx,vy,vz]){
@@ -381,7 +442,7 @@ h1 b{color:#2563eb}
       const y=cosPitch*vy+sinPitch*yawZ,z=-sinPitch*vy+cosPitch*yawZ;
       const rr=x*x+y*y;
       if(rr<1&&z<Math.sqrt(1-rr)-.014)return null;
-      return [width/2+x*radius,height/2-y*radius];
+      return [width/2+x*radius,centerY-y*radius];
     }
     function trace(route){
       let connected=false;
@@ -493,7 +554,7 @@ h1 b{color:#2563eb}
         c.moveTo(x+d,y-d);c.lineTo(x-d,y+d);
         c.lineWidth=1.8*scale;c.strokeStyle=coral;c.stroke();
       }
-    }else{
+    }else if(mode===4){
       stroke(mesh,dark?'#6eecdd69':'#40b5bdb0',.95);
       for(const city of Object.values(cities))dot(project(city.point),2.1,accent);
       stroke(scene.chain,base,6.3);
@@ -507,6 +568,28 @@ h1 b{color:#2563eb}
         dot(pos,5.3,base);
         dot(pos,3.2,accent);
       }
+    }else{
+      stroke(nightRoutes,dark?'#45d7c14d':'#49cdbb57',.66);
+      stroke(scene.featured,dark?'#48e5cf30':'#4cd2bf3b',4.2);
+      stroke(scene.featured,'#69e8d6bf',1.1);
+      const gold='#ffce8c';
+      Object.values(nightHubs).forEach((point,i)=>{
+        const pos=project(point);
+        const pulse=.5+.5*Math.sin(sceneTime*1.7+i*1.91);
+        dot(pos,2.6+pulse*2,i%5===0?'#ffd18b35':'#61e1d126');
+        dot(pos,1.1+pulse*.65,i%5===0?gold:'#8ff9df');
+      });
+      for(let i=0;i<nightRoutes.length;i+=3){
+        const route=nightRoutes[i];
+        const pos=project(route.curve(phase(.13+i%7*.024,i*.077)));
+        dot(pos,3.4,i%4===0?'#ffce8c38':'#78ffe73d');
+        dot(pos,1.45,i%4===0?gold:'#b5fff0');
+      }
+      scene.featured.forEach((route,i)=>{
+        const pos=project(route.curve(phase(.28,i*.17)));
+        dot(pos,5.3,'#60f8dc47');
+        dot(pos,2.25,'#d6fff5');
+      });
     }
     const selected=project(scene.node.point);
     drawProxyLabel(c,selected,width,height,scale,accent);
