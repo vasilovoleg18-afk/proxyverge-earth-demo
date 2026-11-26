@@ -5,8 +5,45 @@
 @media(max-width:760px){main{padding:20px 14px}header{display:block}.brand{margin-bottom:18px}h1{font-size:21px}#pv-earth-live .pv-modes{gap:6px}#pv-earth-live .pv-modes button{padding:9px 12px;font-size:14px}#pv-earth-live .pv-toolbar{gap:10px}#pv-earth-live .pv-speed input{width:80px}}
 @media(max-width:680px){#pv-earth-live .pv-scene{height:330px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
-</style></head><body><main><header><div><div class="brand">Proxy<b>V</b>erge</div><p class="kicker">3D Earth Demo</p></div><div><h1>Выберите, как будет выглядеть Земля</h1><p class="intro">Пять живых вариантов. Перетаскивайте планету мышью или пальцем. Для управления с клавиатуры выберите планету и используйте стрелки.</p></div></header><div id="pv-earth-live">
-  <nav class="pv-modes" aria-label="Варианты Земли"></nav><div class="pv-toolbar">
+#pv-earth-live .pv-proxy{border:1px solid #d1dcea;border-radius:14px;background:#fff;padding:16px 18px;margin-bottom:14px}
+#pv-earth-live .pv-proxy-head,#pv-earth-live .pv-proxy-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px}
+#pv-earth-live .pv-proxy-head{justify-content:space-between;margin-bottom:12px}
+#pv-earth-live .pv-proxy-head h2{font-size:17px;margin:0}
+#pv-earth-live .pv-network-count,#pv-earth-live .pv-proxy-note{font-size:13px;color:#53647b}
+#pv-earth-live .pv-proxy-controls label{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:14px;font-weight:600}
+#pv-earth-live .pv-proxy-controls select,#pv-earth-live .pv-send{font:inherit;min-height:42px;border-radius:8px;padding:7px 12px}
+#pv-earth-live .pv-proxy-controls select{max-width:100%;border:1px solid #b8c8dd;background:#fff;color:#182439}
+#pv-earth-live .pv-proxy-controls :is(select,input):focus-visible{outline:3px solid #3b82f6;outline-offset:2px}
+#pv-earth-live .pv-proxy-controls input{accent-color:#1555d7;width:17px;height:17px}
+#pv-earth-live .pv-send{background:#174fca;color:#fff;border:1px solid #174fca;font-size:14px;font-weight:650}
+#pv-earth-live .pv-send:disabled{opacity:.7;cursor:default}
+#pv-earth-live .pv-flow{display:grid;grid-template-columns:1fr 1.25fr 1fr;list-style:none;margin:14px 0 8px;padding:0;gap:10px}
+#pv-earth-live .pv-flow li{display:flex;flex-direction:column;justify-content:center;min-width:0;border:1px solid #dbe4ef;border-radius:8px;padding:7px 11px;font-size:13px;color:#48617c;background:#f6f8fc}
+#pv-earth-live .pv-flow li[data-current="true"]{background:#eaf5ff;border-color:#5392e7}
+#pv-earth-live .pv-flow li:nth-child(2){border-left:3px solid #087879}
+#pv-earth-live .pv-flow strong{font-size:14px;font-weight:650;color:#182439;overflow-wrap:anywhere}
+#pv-earth-live .pv-flow kbd{font-size:12px;color:#086462;overflow-wrap:anywhere}
+#pv-earth-live .pv-request-status{margin:0;min-height:21px;font-size:14px;color:#334b68}
+#pv-earth-live .pv-proxy-note{margin:4px 0 0}
+@media(max-width:440px){#pv-earth-live .pv-proxy{padding:12px}#pv-earth-live .pv-flow{gap:4px;grid-template-columns:.87fr 1.3fr 1fr}#pv-earth-live .pv-flow li{padding:6px 5px;font-size:11px}#pv-earth-live .pv-flow strong{font-size:12px}#pv-earth-live .pv-flow kbd{font-size:11px}}
+</style></head><body><main><header><div><div class="brand">Proxy<b>V</b>erge</div><p class="kicker">Демо прокси-сети</p></div><div><h1>Прокси-маршруты на 3D-глобусе</h1><p class="intro">Выберите город выхода и посмотрите, как запрос проходит через прокси. Глобус можно вращать мышью, пальцем или стрелками на клавиатуре.</p></div></header><div id="pv-earth-live">
+  <nav class="pv-modes" aria-label="Варианты Земли"></nav>
+  <section class="pv-proxy" aria-labelledby="pv-proxy-heading">
+    <div class="pv-proxy-head"><h2 id="pv-proxy-heading">Как работает прокси ProxyVerge</h2><span class="pv-network-count"></span></div>
+    <div class="pv-proxy-controls">
+      <label>Город выхода <select class="pv-exit"></select></label>
+      <button type="button" class="pv-send">Отправить запрос</button>
+      <label><input class="pv-show-network" type="checkbox" checked> Показать всю сеть</label>
+    </div>
+    <ol class="pv-flow" aria-label="Путь запроса">
+      <li>Клиент <strong>Варшава</strong></li>
+      <li>Прокси ProxyVerge <strong class="pv-exit-city">Франкфурт</strong><kbd class="pv-exit-ip"></kbd></li>
+      <li>Сайт назначения <strong>example.com</strong></li>
+    </ol>
+    <p class="pv-request-status" role="status"></p>
+    <p class="pv-proxy-note">Учебная симуляция. Города, маршруты и IP приведены для примера.</p>
+  </section>
+  <div class="pv-toolbar">
     <button type="button" class="pv-pause">Пауза</button>
     <label class="pv-speed">Скорость <input type="range" min="0.3" max="2" value="1" step="0.1" aria-label="Скорость вращения"><output>1×</output></label><button type="button" class="pv-reset">Сбросить ракурс</button>
     <span class="pv-status" role="status">Загружаются текстуры Земли…</span>
@@ -24,7 +61,7 @@
     <section data-variant="Объёмные облака" data-mode="3" hidden>
       <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
     </section>
-    <section data-variant="Три маршрута" data-mode="4" hidden>
+    <section data-variant="Глобальная сеть" data-mode="4" hidden>
       <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
     </section>
   </div>
@@ -59,7 +96,7 @@
     'Более близкий ракурс, наклонённая ось и тонкая воздушная кромка.',
     'Граница дня и ночи. Огни городов появляются на теневой стороне.',
     'Приподнятый облачный слой с собственным движением и тенями.',
-    'Три пространственные дуги. Маршруты вращаются вместе с географией.'
+    'Пространственные дуги связывают узлы по всему миру. Светящиеся точки показывают движение запросов.'
   ];
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const settings={speed:1,playing:!reduced.matches};
@@ -78,7 +115,7 @@
   });
   const speedInput=root.querySelector('.pv-speed input');
   speedInput.addEventListener('input',()=>{settings.speed=Number(speedInput.value);root.querySelector('.pv-speed output').value=settings.speed.toFixed(1).replace('.0','')+'×';});
-  root.querySelector('.pv-reset').addEventListener('click',()=>{angle=0;tilt=-.16;targets={x:0,y:0};parallax={x:0,y:0};draw();});
+  root.querySelector('.pv-reset').addEventListener('click',()=>{focusRoute();draw();});
   const vertex='attribute vec2 aPosition;varying vec2 vUv;void main(){vUv=aPosition*.5+.5;gl_Position=vec4(aPosition,0.,1.);}';
   const fragment=`precision highp float;
     varying vec2 vUv;
@@ -91,7 +128,7 @@
     vec2 uv(vec3 p){p=normalize(p);return vec2(fract(atan(p.x,p.z)/(2.*PI)+.5),asin(clamp(p.y,-1.,1.))/PI+.5);}
     float cloudAt(vec2 p){vec4 cloud=texture2D(uCloud,vec2(fract(p.x),clamp(p.y,0.,1.)));return cloud.r*cloud.a;}
     void main(){
-      float zoom=uMode==1.?2.24:2.64;
+      float zoom=(uMode==1.?2.24:2.64)/min(1.,uAspect*1.12);
       vec2 p=(vUv-.5)*vec2(uAspect,1.)*zoom;
       float rr=dot(p,p),d=sqrt(rr);
       vec3 sun=normalize(vec3(-.72,.50,1.35));
@@ -136,7 +173,7 @@
   function makeRenderer(theme){
     const canvas=document.createElement('canvas');
     canvas.setAttribute('role','img');canvas.tabIndex=0;canvas.setAttribute('aria-keyshortcuts','ArrowLeft ArrowRight ArrowUp ArrowDown');canvas.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft')angle-=.10;if(e.key==='ArrowRight')angle+=.10;if(e.key==='ArrowUp')tilt=Math.max(-.75,tilt-.08);if(e.key==='ArrowDown')tilt=Math.min(.65,tilt+.08);draw();});
-    canvas.setAttribute('aria-label','Вращающаяся трёхмерная Земля. '+(theme==='light'?'Светлая':'Тёмная')+' тема.');
+    canvas.setAttribute('aria-label','Глобус с прокси-маршрутами ProxyVerge. '+(theme==='light'?'Светлая':'Тёмная')+' тема.');
     const overlay=document.createElement('canvas');overlay.className='pv-route';overlay.setAttribute('aria-hidden','true');
     const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false,preserveDrawingBuffer:true});
     if(!gl)throw Error('Браузер не предоставил WebGL для живого 3D-превью.');
@@ -160,26 +197,245 @@
   const renderers=[];
   function syncActive(){
     const next=sections.find(s=>!s.hidden);if(!next)return;
-    active=next;mode=Number(next.dataset.mode);caption.textContent=descriptions[mode];
+    const nextMode=Number(next.dataset.mode);
+    if(nextMode!==mode) tilt+=(mode===1?-.23:0)-(nextMode===1?-.23:0);
+    active=next;mode=nextMode;caption.textContent=descriptions[mode];
     for(const r of renderers){const target=next.querySelector('[data-theme="'+r.theme+'"]');if(r.canvas.parentElement!==target){target.append(r.canvas,r.overlay);}}
     draw();
   }
   function updatePlay(){pauseButton.textContent=settings.playing?'Пауза':'Продолжить';pauseButton.setAttribute('aria-pressed',String(!settings.playing));}
   pauseButton.addEventListener('click',()=>{settings.playing=!settings.playing;updatePlay();draw();});
-  reduced.addEventListener('change',e=>{if(e.matches){settings.playing=false;updatePlay();}});
-  function vector(lon,lat){lon*=Math.PI/180;lat*=Math.PI/180;return [Math.cos(lat)*Math.sin(lon),Math.sin(lat),Math.cos(lat)*Math.cos(lon)];}
-  const routePairs=[[[ -74,40.7],[-.12,51.5]],[[-.12,51.5],[103.8,1.35]],[[-46.6,-23.5],[-9.14,38.72]]];
-  const routes=routePairs.map(pair=>{const a=vector(...pair[0]),b=vector(...pair[1]);const omega=Math.acos(Math.min(1,a.reduce((s,v,i)=>s+v*b[i],0)));return {a,b,omega};});
-  function viewPoint(v,yaw,pitch){const c=Math.cos(yaw),s=Math.sin(yaw);const x=c*v[0]-s*v[2],z=s*v[0]+c*v[2];return [x,Math.cos(pitch)*v[1]+Math.sin(pitch)*z,-Math.sin(pitch)*v[1]+Math.cos(pitch)*z];}
-  function onArc(route,t){const {a,b,omega}=route;const v=a.map((x,i)=>(Math.sin((1-t)*omega)*x+Math.sin(t*omega)*b[i])/Math.sin(omega));const height=1.012+.20*Math.sin(Math.PI*t);return v.map(x=>x*height);}
-  function drawRoutes(r,width,height,yaw,pitch){
-    const c=r.context;c.clearRect(0,0,width,height);if(mode!==4)return;
-    const project=v=>{const p=viewPoint(v,yaw,pitch);const rr=p[0]*p[0]+p[1]*p[1];return {x:width/2+p[0]*height/2.64,y:height/2-p[1]*height/2.64,show:p[2]>0&&(rr>=1||p[2]>=Math.sqrt(1-rr)-.012)};};
-    c.lineWidth=Math.max(1,width/420)*1.05;c.strokeStyle=r.theme==='light'?'rgba(0,139,147,.85)':'rgba(66,213,204,.85)';
-    routes.forEach((route,index)=>{
-      c.beginPath();let connected=false;for(let i=0;i<=80;i++){const p=project(onArc(route,i/80));if(p.show){if(connected)c.lineTo(p.x,p.y);else c.moveTo(p.x,p.y);connected=true;}else connected=false;}c.stroke();
-      for(const t of [0,1,((time*.10+index*.31)%1)]){const p=project(onArc(route,t));if(!p.show)continue;c.beginPath();c.arc(p.x,p.y,t===0||t===1?2.5:2,0,Math.PI*2);c.fillStyle=r.theme==='light'?'#058c94':'#74e6d9';c.fill();}
+  reduced.addEventListener('change',e=>{if(e.matches){settings.playing=false;updatePlay();if(request) finishRequest();draw();}});
+  function vector(lon,lat){
+    lon*=Math.PI/180;
+    lat*=Math.PI/180;
+    return [Math.cos(lat)*Math.sin(lon),Math.sin(lat),Math.cos(lat)*Math.cos(lon)];
+  }
+  const nodes=Object.fromEntries([
+    ['fra','Франкфурт',8.68,50.11],['ams','Амстердам',4.90,52.37],
+    ['par','Париж',2.35,48.86],['mad','Мадрид',-3.70,40.42],
+    ['hel','Хельсинки',24.94,60.17],['ist','Стамбул',28.98,41.01],
+    ['nyc','Нью-Йорк',-74.01,40.71],['yyz','Торонто',-79.38,43.65],
+    ['chi','Чикаго',-87.63,41.88],['lax','Лос-Анджелес',-118.24,34.05],
+    ['gru','Сан-Паулу',-46.63,-23.55],['jnb','Йоханнесбург',28.05,-26.20],
+    ['dxb','Дубай',55.27,25.20],['bom','Мумбаи',72.88,19.08],
+    ['sin','Сингапур',103.82,1.35],['hkg','Гонконг',114.17,22.32],
+    ['tyo','Токио',139.69,35.68],['syd','Сидней',151.21,-33.87]
+  ].map(([key,name,lon,lat],i)=>[key,{name,point:vector(lon,lat),ip:'203.0.113.'+(20+i)}]));
+  const client=vector(21.01,52.23);
+  const site=vector(-.13,51.51);
+  const segments=36;
+  function makeRoute(a,b,lift){
+    const omega=Math.acos(Math.max(-1,Math.min(1,a.reduce((sum,x,i)=>sum+x*b[i],0))));
+    const arc=t=>{
+      const divisor=Math.sin(omega);
+      const stepA=Math.sin((1-t)*omega)/divisor;
+      const stepB=Math.sin(t*omega)/divisor;
+      const height=1.006+lift*Math.sin(Math.PI*t);
+      return a.map((x,i)=>(stepA*x+stepB*b[i])*height);
+    };
+    return {arc,points:Array.from({length:segments+1},(_,i)=>arc(i/segments))};
+  }
+  const links=[
+    'fra-ams','fra-par','fra-hel','fra-ist','fra-nyc','fra-dxb','fra-sin',
+    'ams-par','ams-hel','ams-yyz','ams-tyo','par-mad','par-nyc','par-gru',
+    'mad-nyc','mad-gru','mad-jnb','hel-ist','hel-tyo','ist-dxb','ist-bom',
+    'nyc-yyz','nyc-chi','nyc-lax','nyc-gru','yyz-chi','yyz-lax',
+    'chi-lax','lax-tyo','lax-syd','lax-hkg','gru-jnb','jnb-dxb','jnb-bom',
+    'dxb-bom','dxb-sin','bom-sin','bom-hkg','sin-hkg','sin-tyo','sin-syd','hkg-tyo','hkg-syd'
+  ];
+  const routes=links.map((link,i)=>{
+    const [from,to]=link.split('-');
+    const a=nodes[from].point,b=nodes[to].point;
+    const distance=Math.hypot(...a.map((x,axis)=>x-b[axis]));
+    return makeRoute(a,b,.035+distance*.065+(i%4)*.009);
+  });
+  const exitSelect=root.querySelector('.pv-exit');
+  const sendButton=root.querySelector('.pv-send');
+  const showNetwork=root.querySelector('.pv-show-network');
+  const requestStatus=root.querySelector('.pv-request-status');
+  const flowSteps=Array.from(root.querySelectorAll('.pv-flow li'));
+  let proxy=nodes.fra;
+  let requestRoutes=[];
+  let request=null;
+  const hopDuration=950;
+
+  for(const [key,node] of Object.entries(nodes)) exitSelect.add(new Option(node.name,key));
+  root.querySelector('.pv-network-count').textContent=Object.keys(nodes).length+' городов · '+links.length+' маршрута';
+
+  function setRequestStatus(message,stage){
+    requestStatus.textContent=message;
+    flowSteps.forEach((step,index)=>{
+      step.dataset.current=String(index===stage);
+      if(index===stage) step.setAttribute('aria-current','step');
+      else step.removeAttribute('aria-current');
     });
+  }
+  function focusRoute(){
+    const [x,y,z]=requestRoutes[0].arc(.61);
+    angle=Math.atan2(x,z);
+    const pitch=Math.max(-.80,Math.min(.65,-Math.atan2(y,Math.hypot(x,z))));
+    tilt=pitch-(mode===1?-.23:0);
+    targets={x:0,y:0};
+    parallax={x:0,y:0};
+  }
+  function selectProxy(){
+    proxy=nodes[exitSelect.value];
+    request=null;
+    sendButton.disabled=false;
+    sendButton.textContent='Отправить запрос';
+    requestRoutes=[makeRoute(client,proxy.point,.095),makeRoute(proxy.point,site,.18)];
+    root.querySelector('.pv-exit-city').textContent=proxy.name;
+    root.querySelector('.pv-exit-ip').textContent=proxy.ip;
+    setRequestStatus('Запустите запрос, чтобы увидеть его путь через выбранный прокси.',-1);
+    focusRoute();
+    draw();
+  }
+  function finishRequest(){
+    request=null;
+    sendButton.disabled=false;
+    sendButton.textContent='Повторить запрос';
+    setRequestStatus('example.com видит IP прокси '+proxy.ip+'. Ответ вернулся через тот же прокси.',2);
+  }
+  function updateRequest(now){
+    if(!request)return;
+    const passed=now-request.started;
+    const stage=Math.min(3,Math.floor(passed/hopDuration));
+    if(passed>=4*hopDuration){finishRequest();draw();return;}
+    if(stage!==request.stage){
+      const messages=['Запрос от клиента идёт к прокси…','Прокси передаёт запрос на example.com…','Сайт отправляет ответ прокси…','Прокси возвращает ответ клиенту…'];
+      setRequestStatus(messages[stage],[0,1,2,1][stage]);
+      request.stage=stage;
+    }
+    request.progress=(passed%hopDuration)/hopDuration;
+  }
+  sendButton.addEventListener('click',()=>{
+    focusRoute();
+    if(reduced.matches){finishRequest();draw();return;}
+    sendButton.disabled=true;
+    request={started:performance.now(),stage:-1,progress:0};
+    updateRequest(request.started);
+    draw();
+  });
+  exitSelect.addEventListener('change',selectProxy);
+  showNetwork.addEventListener('change',draw);
+  selectProxy();
+
+  function drawProxyLabel(c,point,width,height,scale,accent){
+    const detail='Прокси · '+proxy.name;
+    const titleFont='700 '+(13*scale)+'px system-ui';
+    const detailFont='500 '+(10.5*scale)+'px system-ui';
+    c.font=detailFont;
+    const labelWidth=Math.max(80*scale,c.measureText(detail).width)+20*scale;
+    const labelHeight=38*scale;
+    const margin=12*scale;
+    let x=margin,y=height-labelHeight-margin;
+    if(point){
+      x=point[0]+labelWidth+17*scale<width-margin?point[0]+17*scale:point[0]-labelWidth-17*scale;
+      x=Math.max(margin,Math.min(width-labelWidth-margin,x));
+      y=Math.max(40*scale,Math.min(height-labelHeight-margin,point[1]-labelHeight-6*scale));
+      c.beginPath();
+      c.moveTo(...point);
+      c.lineTo(x>point[0]?x:x+labelWidth,y+labelHeight*.73);
+      c.strokeStyle=accent;
+      c.lineWidth=1.1*scale;
+      c.stroke();
+    }
+    c.beginPath();
+    c.roundRect(x,y,labelWidth,labelHeight,7*scale);
+    c.fillStyle='#0b1f38';
+    c.fill();
+    c.strokeStyle=point?accent:'#42678e';
+    c.lineWidth=scale;
+    c.stroke();
+    c.font=titleFont;
+    const titleX=x+10*scale,titleY=y+15*scale;
+    c.fillStyle='#f5f9ff';
+    c.fillText('Proxy',titleX,titleY);
+    const vX=titleX+c.measureText('Proxy').width;
+    c.fillStyle='#74adff';
+    c.fillText('V',vX,titleY);
+    c.fillStyle='#f5f9ff';
+    c.fillText('erge',vX+c.measureText('V').width,titleY);
+    c.font=detailFont;
+    c.fillStyle='#cce0f7';
+    c.fillText(detail,titleX,y+29*scale);
+  }
+  function drawRoutes(r,width,height,yaw,pitch,scale){
+    const c=r.context;
+    if(!c)return;
+    c.clearRect(0,0,width,height);
+    const dark=r.theme==='dark';
+    const zoom=(mode===1?2.24:2.64)/Math.min(1,width/height*1.12);
+    const radius=height/zoom;
+    const cosYaw=Math.cos(yaw),sinYaw=Math.sin(yaw);
+    const cosPitch=Math.cos(pitch),sinPitch=Math.sin(pitch);
+    function project([vx,vy,vz]){
+      const x=cosYaw*vx-sinYaw*vz;
+      const yawZ=sinYaw*vx+cosYaw*vz;
+      const y=cosPitch*vy+sinPitch*yawZ,z=-sinPitch*vy+cosPitch*yawZ;
+      const rr=x*x+y*y;
+      if(z<=0||(rr<1&&z<Math.sqrt(1-rr)-.012))return null;
+      return [width/2+x*radius,height/2-y*radius];
+    }
+    function trace(route){
+      let connected=false;
+      for(const point of route.points){
+        const pos=project(point);
+        if(pos) {
+          if(connected)c.lineTo(...pos);
+          else c.moveTo(...pos);
+        }
+        connected=Boolean(pos);
+      }
+    }
+    function dot(pos,size,color){
+      if(!pos)return;
+      c.beginPath();
+      c.arc(...pos,size*scale,0,Math.PI*2);
+      c.fillStyle=color;
+      c.fill();
+    }
+    if(showNetwork.checked){
+      const networkBlue=dark?'rgba(150,197,255,.54)':'rgba(77,144,242,.61)';
+      const networkTeal=dark?'rgba(119,235,221,.57)':'rgba(25,172,168,.64)';
+      c.lineWidth=(mode===4?1.02:.76)*scale;
+      for(let color=0;color<2;color++){
+        c.beginPath();
+        routes.forEach((route,i)=>{if(Number(i%3===0)===color)trace(route);});
+        c.strokeStyle=color?networkTeal:networkBlue;
+        c.stroke();
+      }
+      for(const node of Object.values(nodes)) dot(project(node.point),1.55,dark?'#adceff':'#75affc');
+      if(mode===4&&settings.playing){
+        for(let i=0;i<routes.length;i+=5) dot(project(routes[i].arc((time*.22+i*.097)%1)),1.65,dark?'#bffbef':'#b5f5f2');
+      }
+    }
+    const blue=dark?'#93c5ff':'#afd6ff';
+    const teal=dark?'#5aebd4':'#64f5d9';
+    requestRoutes.forEach((route,i)=>{
+      c.beginPath();
+      trace(route);
+      c.lineWidth=3.8*scale;
+      c.strokeStyle='rgba(7,24,48,.62)';
+      c.stroke();
+      c.lineWidth=2.1*scale;
+      c.strokeStyle=i?teal:blue;
+      c.stroke();
+    });
+    const selected=project(proxy.point);
+    dot(project(client),3.3,blue);
+    dot(project(site),3.3,teal);
+    drawProxyLabel(c,selected,width,height,scale,teal);
+    dot(selected,7.1,'#0a243a');
+    dot(selected,4.6,teal);
+    if(request&&request.stage>=0){
+      const index=[0,1,1,0][request.stage];
+      const progress=request.stage<2?request.progress:1-request.progress;
+      const packet=project(requestRoutes[index].arc(progress));
+      dot(packet,5.7,'#0a243a');
+      dot(packet,3.6,'#fff');
+    }
   }
   function draw(){
     if(!ready||!visible||document.hidden)return;
@@ -190,14 +446,15 @@
       const width=parent.clientWidth,height=parent.clientHeight;if(!width||!height)continue;
       const dpr=Math.min(devicePixelRatio||1,1.5);const w=Math.round(width*dpr),h=Math.round(height*dpr);
       if(r.canvas.width!==w||r.canvas.height!==h){r.canvas.width=w;r.canvas.height=h;r.overlay.width=w;r.overlay.height=h;}
-      const {gl,uniforms:u}=r;gl.viewport(0,0,w,h);gl.useProgram(r.program);gl.uniform1f(u.uAspect,w/h);gl.uniform1f(u.uAngle,yaw);gl.uniform1f(u.uPitch,pitch);gl.uniform1f(u.uTime,time);gl.uniform1f(u.uMode,mode);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,0,6);drawRoutes(r,w,h,yaw,pitch);
+      const {gl,uniforms:u}=r;gl.viewport(0,0,w,h);gl.useProgram(r.program);gl.uniform1f(u.uAspect,w/h);gl.uniform1f(u.uAngle,yaw);gl.uniform1f(u.uPitch,pitch);gl.uniform1f(u.uTime,time);gl.uniform1f(u.uMode,mode);gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.drawArrays(gl.TRIANGLES,0,6);drawRoutes(r,w,h,yaw,pitch,dpr);
     }
   }
   function tick(now){
     requestAnimationFrame(tick);if(!lastTick)lastTick=now;const dt=Math.min(.08,(now-lastTick)/1000);lastTick=now;
     if(document.hidden||!visible)return;
-    if(settings.playing&&!drag){time+=dt*settings.speed;angle+=dt*.07*settings.speed;}
-    const moving=settings.playing||drag||Math.abs(targets.x-parallax.x)>.0001||Math.abs(targets.y-parallax.y)>.0001;
+    updateRequest(now);
+    if(settings.playing&&!drag){time+=dt*settings.speed;if(!request)angle+=dt*.07*settings.speed;}
+    const moving=settings.playing||request||drag||Math.abs(targets.x-parallax.x)>.0001||Math.abs(targets.y-parallax.y)>.0001;
     parallax.x+=(targets.x-parallax.x)*.06;parallax.y+=(targets.y-parallax.y)*.06;
     if(moving&&now-lastFrame>=1000/30){lastFrame=now;draw();}
   }
@@ -206,9 +463,10 @@
   try{renderers.push(makeRenderer('light'),makeRenderer('dark'));syncActive();updatePlay();
     Promise.all(['earth_atmos_2048.jpg','earth_clouds_1024.png','earth_lights_2048.png'].map(file=>image(base+file))).then(images=>{
       for(const r of renderers){const {gl,uniforms:u}=r;gl.useProgram(r.program);images.forEach((img,i)=>{const texture=gl.createTexture();gl.activeTexture(gl.TEXTURE0+i);gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.uniform1i([u.uDay,u.uCloud,u.uNight][i],i);});}
-      ready=true;status.textContent='';root.dataset.ready='true';draw();requestAnimationFrame(tick);
+       ready=true;status.textContent='';root.dataset.ready='true';draw();
     }).catch(e=>{status.textContent=e.message;root.dataset.error=e.message;});
   }catch(e){status.textContent=e.message;root.dataset.error=e.message;}
+  requestAnimationFrame(tick);
   new MutationObserver(syncActive).observe(carousel,{subtree:true,attributes:true,attributeFilter:['hidden']});
   new ResizeObserver(draw).observe(root);
   new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible)draw();}).observe(root);
