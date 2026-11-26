@@ -1,106 +1,64 @@
 <!doctype html>
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><meta name="description" content="Пять интерактивных 3D-вариантов Земли для ProxyVerge. Сравнение светлой и тёмной темы."><meta name="color-scheme" content="light"><title>ProxyVerge · 3D Earth Demo</title>
 <style>
-*{box-sizing:border-box}html{color-scheme:light}body{margin:0;background:#edf1f7;color:#16243a;font-family:Inter,Arial,sans-serif;font-size:16px;line-height:1.5}main{max-width:1240px;margin:auto;padding:30px 24px 24px}header{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:25px}.brand{font-size:27px;font-weight:750;letter-spacing:-1px}.brand b{color:#2563eb}.kicker{font-size:14px;color:#536680;margin:5px 0 0}h1{font-size:23px;font-weight:600;line-height:1.3;margin:0 0 8px}.intro{max-width:580px;color:#536680;font-size:15px;margin:0}button,input{font:inherit}button{cursor:pointer}button:focus-visible,canvas:focus-visible{outline:3px solid #3b82f6;outline-offset:3px}footer{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-top:20px;color:#617188;font-size:13px}footer a{color:inherit}#pv-earth-live{--pv-text:#182439;--pv-muted:#53647b;--pv-control:#e0e8f4}#pv-earth-live .pv-modes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}#pv-earth-live .pv-modes button{border:1px solid #cbd5e3;border-radius:9px;background:#fff;color:#33465e;padding:10px 15px;min-height:44px}#pv-earth-live .pv-modes button[aria-pressed="true"]{background:#1f5de7;color:white;border-color:#1f5de7}#pv-earth-live .pv-toolbar{padding-right:0;gap:18px;margin-bottom:18px}#pv-earth-live .pv-speed{display:flex;align-items:center;gap:10px;font-size:14px}#pv-earth-live .pv-speed input{width:100px;accent-color:#2563eb}#pv-earth-live .pv-speed output{min-width:35px;font-variant-numeric:tabular-nums}#pv-earth-live .pv-reset{border:0;background:transparent;color:#35547b;padding:9px 5px;min-height:42px}#pv-earth-live .pv-scene{height:460px}#pv-earth-live .pv-pair{border-radius:14px;overflow:hidden}#pv-earth-live .pv-caption{font-size:15px;min-height:24px}#pv-earth-live .pv-status{font-size:14px}
-@media(max-width:760px){main{padding:20px 14px}header{display:block}.brand{margin-bottom:18px}h1{font-size:21px}#pv-earth-live .pv-modes{gap:6px}#pv-earth-live .pv-modes button{padding:9px 12px;font-size:14px}#pv-earth-live .pv-toolbar{gap:10px}#pv-earth-live .pv-speed input{width:80px}}
-@media(max-width:680px){#pv-earth-live .pv-scene{height:330px}}
-@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
-#pv-earth-live .pv-proxy{border:1px solid #d1dcea;border-radius:14px;background:#fff;padding:16px 18px;margin-bottom:14px}
-#pv-earth-live .pv-proxy-head,#pv-earth-live .pv-proxy-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px 18px}
-#pv-earth-live .pv-proxy-head{justify-content:space-between;margin-bottom:12px}
-#pv-earth-live .pv-proxy-head h2{font-size:17px;margin:0}
-#pv-earth-live .pv-network-count,#pv-earth-live .pv-proxy-note{font-size:13px;color:#53647b}
-#pv-earth-live .pv-proxy-controls label{display:flex;align-items:center;flex-wrap:wrap;gap:7px;font-size:14px;font-weight:600}
-#pv-earth-live .pv-proxy-controls select,#pv-earth-live .pv-send{font:inherit;min-height:42px;border-radius:8px;padding:7px 12px}
-#pv-earth-live .pv-proxy-controls select{max-width:100%;border:1px solid #b8c8dd;background:#fff;color:#182439}
-#pv-earth-live .pv-proxy-controls :is(select,input):focus-visible{outline:3px solid #3b82f6;outline-offset:2px}
-#pv-earth-live .pv-proxy-controls input{accent-color:#1555d7;width:17px;height:17px}
-#pv-earth-live .pv-send{background:#174fca;color:#fff;border:1px solid #174fca;font-size:14px;font-weight:650}
-#pv-earth-live .pv-send:disabled{opacity:.7;cursor:default}
-#pv-earth-live .pv-flow{display:grid;grid-template-columns:1fr 1.25fr 1fr;list-style:none;margin:14px 0 8px;padding:0;gap:10px}
-#pv-earth-live .pv-flow li{display:flex;flex-direction:column;justify-content:center;min-width:0;border:1px solid #dbe4ef;border-radius:8px;padding:7px 11px;font-size:13px;color:#48617c;background:#f6f8fc}
-#pv-earth-live .pv-flow li[data-current="true"]{background:#eaf5ff;border-color:#5392e7}
-#pv-earth-live .pv-flow li:nth-child(2){border-left:3px solid #087879}
-#pv-earth-live .pv-flow strong{font-size:14px;font-weight:650;color:#182439;overflow-wrap:anywhere}
-#pv-earth-live .pv-flow kbd{font-size:12px;color:#086462;overflow-wrap:anywhere}
-#pv-earth-live .pv-request-status{margin:0;min-height:21px;font-size:14px;color:#334b68}
-#pv-earth-live .pv-proxy-note{margin:4px 0 0}
-@media(max-width:440px){#pv-earth-live .pv-proxy{padding:12px}#pv-earth-live .pv-flow{gap:4px;grid-template-columns:.87fr 1.3fr 1fr}#pv-earth-live .pv-flow li{padding:6px 5px;font-size:11px}#pv-earth-live .pv-flow strong{font-size:12px}#pv-earth-live .pv-flow kbd{font-size:11px}}
-</style></head><body><main><header><div><div class="brand">Proxy<b>V</b>erge</div><p class="kicker">Демо прокси-сети</p></div><div><h1>Прокси-маршруты на 3D-глобусе</h1><p class="intro">Выберите город выхода и посмотрите, как запрос проходит через прокси. Глобус можно вращать мышью, пальцем или стрелками на клавиатуре.</p></div></header><div id="pv-earth-live">
-  <nav class="pv-modes" aria-label="Варианты Земли"></nav>
-  <section class="pv-proxy" aria-labelledby="pv-proxy-heading">
-    <div class="pv-proxy-head"><h2 id="pv-proxy-heading">Как работает прокси ProxyVerge</h2><span class="pv-network-count"></span></div>
-    <div class="pv-proxy-controls">
-      <label>Город выхода <select class="pv-exit"></select></label>
-      <button type="button" class="pv-send">Отправить запрос</button>
-      <label><input class="pv-show-network" type="checkbox" checked> Показать всю сеть</label>
-    </div>
-    <ol class="pv-flow" aria-label="Путь запроса">
-      <li>Клиент <strong>Варшава</strong></li>
-      <li>Прокси ProxyVerge <strong class="pv-exit-city">Франкфурт</strong><kbd class="pv-exit-ip"></kbd></li>
-      <li>Сайт назначения <strong>example.com</strong></li>
-    </ol>
-    <p class="pv-request-status" role="status"></p>
-    <p class="pv-proxy-note">Учебная симуляция. Города, маршруты и IP приведены для примера.</p>
-  </section>
-  <div class="pv-toolbar">
-    <button type="button" class="pv-pause">Пауза</button>
-    <label class="pv-speed">Скорость <input type="range" min="0.3" max="2" value="1" step="0.1" aria-label="Скорость вращения"><output>1×</output></label><button type="button" class="pv-reset">Сбросить ракурс</button>
-    <span class="pv-status" role="status">Загружаются текстуры Земли…</span>
-  </div>
+*{box-sizing:border-box}
+html{color-scheme:light}
+body{margin:0;background:#edf1f7;color:#16243a;font:16px/1.5 Inter,system-ui,sans-serif}
+main{max-width:1320px;margin:auto;padding:24px}
+h1{font-size:27px;line-height:1.2;font-weight:750;letter-spacing:-.8px;margin:0 0 17px}
+h1 b{color:#2563eb}
+.pv-modes{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.pv-modes button{font:inherit;cursor:pointer;border:1px solid #cbd5e3;border-radius:9px;background:#fff;color:#344961;padding:8px 13px;min-height:42px}
+.pv-modes button[aria-pressed="true"]{background:#1756d4;color:#fff;border-color:#1756d4}
+.pv-modes button:focus-visible{outline:3px solid #3b82f6;outline-offset:2px}
+.pv-status{color:#526780;font-size:14px;margin:12px 0 0}
+.pv-status:empty{display:none}
+.pv-pair{display:grid;grid-template-columns:1fr 1fr;overflow:hidden;border:1px solid #d5dfed;border-radius:15px}
+.pv-scene{position:relative;min-width:0;height:clamp(380px,58vw,540px);overflow:hidden;isolation:isolate}
+.pv-light{background:#f7f9fd;color:#2b3d56}
+.pv-dark{background:#080f1e;color:#c4d1e6}
+.pv-scene>span{position:absolute;left:17px;top:13px;z-index:2;font-size:14px;font-weight:550;pointer-events:none}
+.pv-scene canvas{display:block;position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y;cursor:grab}
+.pv-scene canvas:active{cursor:grabbing}
+.pv-scene canvas:focus-visible{outline:3px solid #6ba3ff;outline-offset:-4px}
+.pv-scene .pv-route{pointer-events:none;z-index:1}
+@media(max-width:680px){
+  main{padding:17px 12px}
+  .pv-modes{gap:6px}
+  .pv-modes button{font-size:14px;padding:7px 11px}
+  .pv-pair{grid-template-columns:1fr}
+  .pv-scene{height:clamp(280px,77vw,380px)}
+}
+</style></head><body><main><header><h1>Proxy<b>V</b>erge</h1></header><div id="pv-earth-live">
+  <nav class="pv-modes" aria-label="Варианты маршрутов"></nav>
   <div class="viz-carousel" aria-label="Варианты живой Земли" data-previous-label="Предыдущий" data-next-label="Следующий">
-    <section data-variant="Дневная Земля" data-mode="0">
+    <section data-variant="Веер маршрутов" data-mode="0">
       <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
     </section>
-    <section data-variant="Тонкая атмосфера" data-mode="1" hidden>
+    <section data-variant="Орбиты" data-mode="1" hidden>
       <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
     </section>
-    <section data-variant="День и ночь" data-mode="2" hidden>
+    <section data-variant="Разветвление" data-mode="2" hidden>
       <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
     </section>
-    <section data-variant="Объёмные облака" data-mode="3" hidden>
+    <section data-variant="Резервный путь" data-mode="3" hidden>
       <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
     </section>
     <section data-variant="Глобальная сеть" data-mode="4" hidden>
       <div class="pv-pair"><div class="pv-scene pv-light" data-theme="light"><span>Светлая тема</span></div><div class="pv-scene pv-dark" data-theme="dark"><span>Тёмная тема</span></div></div>
     </section>
   </div>
-  <div class="pv-caption" aria-live="polite">Естественные цвета, боковое освещение и медленное вращение.</div>
+  <p class="pv-status" role="status">Загружается 3D-глобус…</p>
 </div>
-<style>
-#pv-earth-live{--pv-text:light-dark(#182439,#e4ebf6);--pv-muted:light-dark(#53647b,#a4b4cb);--pv-control:light-dark(#eaf0f8,#1c2a40);font-family:Inter,system-ui,sans-serif;color:var(--pv-text)}
-#pv-earth-live .pv-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-bottom:12px;padding-right:94px}
-#pv-earth-live .pv-pause{font:inherit;color:var(--pv-text);background:var(--pv-control);border:0;border-radius:7px;padding:9px 17px;min-height:42px}
-#pv-earth-live .pv-hint,#pv-earth-live .pv-status,#pv-earth-live .pv-caption{color:var(--pv-muted)}
-#pv-earth-live .pv-status:empty{display:none}
-#pv-earth-live .pv-pair{display:grid;grid-template-columns:1fr 1fr;gap:0}
-#pv-earth-live .pv-scene{position:relative;min-width:0;height:390px;overflow:hidden;isolation:isolate}
-#pv-earth-live .pv-light{background:#f6f8fc;color:#26374e}
-#pv-earth-live .pv-dark{background:#080f1e;color:#c3cee0}
-#pv-earth-live .pv-scene>span{position:absolute;left:18px;top:14px;z-index:2;font-weight:500;pointer-events:none}
-#pv-earth-live canvas{display:block;position:absolute;inset:0;width:100%;height:100%;touch-action:pan-y}
-#pv-earth-live .pv-route{pointer-events:none;z-index:1}
-#pv-earth-live .pv-caption{margin-top:12px}
-@media(max-width:680px){#pv-earth-live .pv-pair{grid-template-columns:1fr}#pv-earth-live .pv-scene{height:320px}#pv-earth-live .pv-toolbar{padding-right:0}}
-</style>
 <script>
 (() => {
   const root=document.getElementById('pv-earth-live');
   const carousel=root.querySelector('.viz-carousel');
   const sections=Array.from(carousel.querySelectorAll(':scope > section'));
   const status=root.querySelector('.pv-status');
-  const pauseButton=root.querySelector('.pv-pause');
-  const caption=root.querySelector('.pv-caption');
-  const descriptions=[
-    'Естественные цвета, боковое освещение и медленное вращение.',
-    'Более близкий ракурс, наклонённая ось и тонкая воздушная кромка.',
-    'Граница дня и ночи. Огни городов появляются на теневой стороне.',
-    'Приподнятый облачный слой с собственным движением и тенями.',
-    'Пространственные дуги связывают узлы по всему миру. Светящиеся точки показывают движение запросов.'
-  ];
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  const settings={speed:1,playing:!reduced.matches};
-  let mode=0,active=sections[0],ready=false,visible=true;
+  let playing=!reduced.matches;
+  let mode=0,ready=false,visible=true;
   let time=0,angle=0,tilt=-0.16,lastFrame=0,lastTick=0,drag=null;
   let targets={x:0,y:0},parallax={x:0,y:0};
   const keys=['natural','atmosphere','day-night','clouds','network'];
@@ -113,9 +71,6 @@
     button.addEventListener('click',()=>{sections.forEach((s,i)=>s.hidden=i!==index);Array.from(picker.children).forEach((b,i)=>b.setAttribute('aria-pressed',String(i===index)));history.replaceState(null,'','#'+keys[index]);});
     picker.append(button);
   });
-  const speedInput=root.querySelector('.pv-speed input');
-  speedInput.addEventListener('input',()=>{settings.speed=Number(speedInput.value);root.querySelector('.pv-speed output').value=settings.speed.toFixed(1).replace('.0','')+'×';});
-  root.querySelector('.pv-reset').addEventListener('click',()=>{focusRoute();draw();});
   const vertex='attribute vec2 aPosition;varying vec2 vUv;void main(){vUv=aPosition*.5+.5;gl_Position=vec4(aPosition,0.,1.);}';
   const fragment=`precision highp float;
     varying vec2 vUv;
@@ -172,8 +127,22 @@
     }`;
   function makeRenderer(theme){
     const canvas=document.createElement('canvas');
-    canvas.setAttribute('role','img');canvas.tabIndex=0;canvas.setAttribute('aria-keyshortcuts','ArrowLeft ArrowRight ArrowUp ArrowDown');canvas.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft')angle-=.10;if(e.key==='ArrowRight')angle+=.10;if(e.key==='ArrowUp')tilt=Math.max(-.75,tilt-.08);if(e.key==='ArrowDown')tilt=Math.min(.65,tilt+.08);draw();});
-    canvas.setAttribute('aria-label','Глобус с прокси-маршрутами ProxyVerge. '+(theme==='light'?'Светлая':'Тёмная')+' тема.');
+    const themeName=theme==='light'?'Светлая':'Тёмная';
+    canvas.tabIndex=0;
+    canvas.title='Перетащите, чтобы повернуть. Нажмите, чтобы сменить узел.';
+    canvas.setAttribute('aria-label',themeName+' тема, 3D-глобус ProxyVerge. Стрелки поворачивают Землю, Enter меняет прокси-узел, пробел останавливает движение.');
+    canvas.setAttribute('aria-keyshortcuts','ArrowLeft ArrowRight ArrowUp ArrowDown Enter Space');
+    canvas.addEventListener('keydown',e=>{
+      if(e.key==='Enter'){e.preventDefault();nextProxy();return;}
+      if(e.key===' '){e.preventDefault();playing=!playing;draw();return;}
+      if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;
+      e.preventDefault();
+      if(e.key==='ArrowLeft')angle-=.10;
+      if(e.key==='ArrowRight')angle+=.10;
+      if(e.key==='ArrowUp')tilt=Math.max(-.95,tilt-.08);
+      if(e.key==='ArrowDown')tilt=Math.min(.83,tilt+.08);
+      draw();
+    });
     const overlay=document.createElement('canvas');overlay.className='pv-route';overlay.setAttribute('aria-hidden','true');
     const gl=canvas.getContext('webgl',{alpha:true,antialias:true,premultipliedAlpha:false,preserveDrawingBuffer:true});
     if(!gl)throw Error('Браузер не предоставил WebGL для живого 3D-превью.');
@@ -186,32 +155,58 @@
     const uniforms={};for(const key of ['uDay','uCloud','uNight','uAngle','uTime','uPitch','uAspect','uMode'])uniforms[key]=gl.getUniformLocation(program,key);
     const context=overlay.getContext('2d');
     const renderer={theme,canvas,overlay,gl,program,uniforms,context};
-    canvas.addEventListener('pointerdown',e=>{drag={id:e.pointerId,x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);});
-    canvas.addEventListener('pointermove',e=>{
-      if(drag&&drag.id===e.pointerId){angle+=(e.clientX-drag.x)*.009;tilt=Math.max(-.75,Math.min(.65,tilt+(e.clientY-drag.y)*.006));drag.x=e.clientX;drag.y=e.clientY;}
-      else if(e.pointerType==='mouse'&&!reduced.matches){const r=canvas.getBoundingClientRect();targets={x:(e.clientX-r.left)/r.width-.5,y:(e.clientY-r.top)/r.height-.5};}
+    canvas.addEventListener('pointerdown',e=>{
+      if(!e.isPrimary||e.button!==0)return;
+      drag={id:e.pointerId,x:e.clientX,y:e.clientY,distance:0};
+      canvas.setPointerCapture(e.pointerId);
     });
-    canvas.addEventListener('pointerup',()=>drag=null);canvas.addEventListener('pointercancel',()=>drag=null);canvas.addEventListener('pointerleave',()=>{targets={x:0,y:0};});
+    canvas.addEventListener('pointermove',e=>{
+      if(drag?.id===e.pointerId){
+        const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+        drag.distance+=Math.hypot(dx,dy);
+        angle+=dx*.009;
+        tilt=Math.max(-.95,Math.min(.83,tilt+dy*.006));
+        drag.x=e.clientX;
+        drag.y=e.clientY;
+        if(!playing)draw();
+      }else if(e.pointerType==='mouse'&&!reduced.matches){
+        const bounds=canvas.getBoundingClientRect();
+        targets={x:(e.clientX-bounds.left)/bounds.width-.5,y:(e.clientY-bounds.top)/bounds.height-.5};
+      }
+    });
+    canvas.addEventListener('pointerup',e=>{
+      if(drag?.id!==e.pointerId)return;
+      const clicked=drag.distance<5;
+      drag=null;
+      if(clicked)nextProxy();
+    });
+    canvas.addEventListener('pointercancel',()=>drag=null);
+    canvas.addEventListener('lostpointercapture',()=>drag=null);
+    canvas.addEventListener('pointerleave',()=>{targets={x:0,y:0};});
     return renderer;
   }
   const renderers=[];
   function syncActive(){
-    const next=sections.find(s=>!s.hidden);if(!next)return;
-    const nextMode=Number(next.dataset.mode);
-    if(nextMode!==mode) tilt+=(mode===1?-.23:0)-(nextMode===1?-.23:0);
-    active=next;mode=nextMode;caption.textContent=descriptions[mode];
-    for(const r of renderers){const target=next.querySelector('[data-theme="'+r.theme+'"]');if(r.canvas.parentElement!==target){target.append(r.canvas,r.overlay);}}
+    const section=sections.find(item=>!item.hidden);
+    const nextMode=Number(section.dataset.mode);
+    if(nextMode!==mode||!scene){
+      mode=nextMode;
+      selectScene();
+    }
+    for(const r of renderers){
+      const target=section.querySelector('[data-theme="'+r.theme+'"]');
+      if(r.canvas.parentElement!==target)target.append(r.canvas,r.overlay);
+    }
     draw();
   }
-  function updatePlay(){pauseButton.textContent=settings.playing?'Пауза':'Продолжить';pauseButton.setAttribute('aria-pressed',String(!settings.playing));}
-  pauseButton.addEventListener('click',()=>{settings.playing=!settings.playing;updatePlay();draw();});
-  reduced.addEventListener('change',e=>{if(e.matches){settings.playing=false;updatePlay();if(request) finishRequest();draw();}});
+
   function vector(lon,lat){
-    lon*=Math.PI/180;
-    lat*=Math.PI/180;
+    const radians=Math.PI/180;
+    lon*=radians;
+    lat*=radians;
     return [Math.cos(lat)*Math.sin(lon),Math.sin(lat),Math.cos(lat)*Math.cos(lon)];
   }
-  const nodes=Object.fromEntries([
+  const cities=Object.fromEntries([
     ['fra','Франкфурт',8.68,50.11],['ams','Амстердам',4.90,52.37],
     ['par','Париж',2.35,48.86],['mad','Мадрид',-3.70,40.42],
     ['hel','Хельсинки',24.94,60.17],['ist','Стамбул',28.98,41.01],
@@ -221,22 +216,31 @@
     ['dxb','Дубай',55.27,25.20],['bom','Мумбаи',72.88,19.08],
     ['sin','Сингапур',103.82,1.35],['hkg','Гонконг',114.17,22.32],
     ['tyo','Токио',139.69,35.68],['syd','Сидней',151.21,-33.87]
-  ].map(([key,name,lon,lat],i)=>[key,{name,point:vector(lon,lat),ip:'203.0.113.'+(20+i)}]));
-  const client=vector(21.01,52.23);
-  const site=vector(-.13,51.51);
-  const segments=36;
-  function makeRoute(a,b,lift){
-    const omega=Math.acos(Math.max(-1,Math.min(1,a.reduce((sum,x,i)=>sum+x*b[i],0))));
-    const arc=t=>{
-      const divisor=Math.sin(omega);
-      const stepA=Math.sin((1-t)*omega)/divisor;
-      const stepB=Math.sin(t*omega)/divisor;
-      const height=1.006+lift*Math.sin(Math.PI*t);
-      return a.map((x,i)=>(stepA*x+stepB*b[i])*height);
-    };
-    return {arc,points:Array.from({length:segments+1},(_,i)=>arc(i/segments))};
+  ].map(([key,name,lon,lat])=>[key,{name,point:vector(lon,lat)}]));
+
+  function sample(curve,segments){
+    return {curve,points:Array.from({length:segments+1},(_,i)=>curve(i/segments))};
   }
-  const links=[
+  function arc(a,b,lift,{elbow=false,segments=32}={}){
+    const omega=Math.acos(Math.max(-1,Math.min(1,a.reduce((sum,x,i)=>sum+x*b[i],0))));
+    const divisor=Math.sin(omega)||1;
+    return sample(t=>{
+      const start=Math.sin((1-t)*omega)/divisor;
+      const end=Math.sin(t*omega)/divisor;
+      const profile=elbow?Math.min(t*6,1,(1-t)*6):Math.sin(Math.PI*t);
+      return a.map((x,i)=>(start*x+end*b[i])*(1.008+lift*profile));
+    },segments);
+  }
+  function ring(radius,inclination,shift){
+    const c=Math.cos(inclination),s=Math.sin(inclination);
+    const cs=Math.cos(shift),ss=Math.sin(shift);
+    return sample(t=>{
+      const theta=t*Math.PI*2;
+      const x=radius*Math.cos(theta),z=radius*Math.sin(theta);
+      return [cs*x+ss*z*c,z*s,cs*z*c-ss*x];
+    },88);
+  }
+  const meshPairs=[
     'fra-ams','fra-par','fra-hel','fra-ist','fra-nyc','fra-dxb','fra-sin',
     'ams-par','ams-hel','ams-yyz','ams-tyo','par-mad','par-nyc','par-gru',
     'mad-nyc','mad-gru','mad-jnb','hel-ist','hel-tyo','ist-dxb','ist-bom',
@@ -244,105 +248,104 @@
     'chi-lax','lax-tyo','lax-syd','lax-hkg','gru-jnb','jnb-dxb','jnb-bom',
     'dxb-bom','dxb-sin','bom-sin','bom-hkg','sin-hkg','sin-tyo','sin-syd','hkg-tyo','hkg-syd'
   ];
-  const routes=links.map((link,i)=>{
-    const [from,to]=link.split('-');
-    const a=nodes[from].point,b=nodes[to].point;
-    const distance=Math.hypot(...a.map((x,axis)=>x-b[axis]));
-    return makeRoute(a,b,.035+distance*.065+(i%4)*.009);
+  const mesh=meshPairs.map(pair=>{
+    const [from,to]=pair.split('-');
+    return arc(cities[from].point,cities[to].point,.014,{segments:24});
   });
-  const exitSelect=root.querySelector('.pv-exit');
-  const sendButton=root.querySelector('.pv-send');
-  const showNetwork=root.querySelector('.pv-show-network');
-  const requestStatus=root.querySelector('.pv-request-status');
-  const flowSteps=Array.from(root.querySelectorAll('.pv-flow li'));
-  let proxy=nodes.fra;
-  let requestRoutes=[];
-  let request=null;
-  const hopDuration=950;
+  const presets=[
+    ['nyc','fra','sin'],
+    ['dxb','fra','tyo'],
+    ['mad','dxb','nyc'],
+    ['lax','ist','sin'],
+    ['fra','sin','nyc']
+  ];
+  const focus=[
+    [[-48,36],[15,35],[100,17]],
+    [[45,18],[6,35],[121,27]],
+    [[-16,22],[45,12],[-62,25]],
+    [[-160,27],[28,28],[110,18]],
+    [[-12,28],[95,19],[-69,28]]
+  ];
+  const cursor=[0,0,0,0,0];
+  const colors=[['#81bdff','#a9d3ff'],['#ffbc57','#ffd37a'],['#ee99ff','#f5b3ff'],['#60e8aa','#7dffc1'],['#45dedb','#76ffed']];
+  let scene,sceneTime=0;
 
-  for(const [key,node] of Object.entries(nodes)) exitSelect.add(new Option(node.name,key));
-  root.querySelector('.pv-network-count').textContent=Object.keys(nodes).length+' городов · '+links.length+' маршрута';
-
-  function setRequestStatus(message,stage){
-    requestStatus.textContent=message;
-    flowSteps.forEach((step,index)=>{
-      step.dataset.current=String(index===stage);
-      if(index===stage) step.setAttribute('aria-current','step');
-      else step.removeAttribute('aria-current');
-    });
-  }
-  function focusRoute(){
-    const [x,y,z]=requestRoutes[0].arc(.61);
-    angle=Math.atan2(x,z);
-    const pitch=Math.max(-.80,Math.min(.65,-Math.atan2(y,Math.hypot(x,z))));
-    tilt=pitch-(mode===1?-.23:0);
+  function selectScene(){
+    const index=cursor[mode];
+    const node=cities[presets[mode][index]];
+    const hub=node.point;
+    const others=Object.values(cities).filter(city=>city!==node).map(city=>city.point);
+    const [lon,lat]=focus[mode][index];
+    angle=lon*Math.PI/180;
+    tilt=-lat*Math.PI/180+(mode===1?.23:0);
     targets={x:0,y:0};
     parallax={x:0,y:0};
-  }
-  function selectProxy(){
-    proxy=nodes[exitSelect.value];
-    request=null;
-    sendButton.disabled=false;
-    sendButton.textContent='Отправить запрос';
-    requestRoutes=[makeRoute(client,proxy.point,.095),makeRoute(proxy.point,site,.18)];
-    root.querySelector('.pv-exit-city').textContent=proxy.name;
-    root.querySelector('.pv-exit-ip').textContent=proxy.ip;
-    setRequestStatus('Запустите запрос, чтобы увидеть его путь через выбранный прокси.',-1);
-    focusRoute();
-    draw();
-  }
-  function finishRequest(){
-    request=null;
-    sendButton.disabled=false;
-    sendButton.textContent='Повторить запрос';
-    setRequestStatus('example.com видит IP прокси '+proxy.ip+'. Ответ вернулся через тот же прокси.',2);
-  }
-  function updateRequest(now){
-    if(!request)return;
-    const passed=now-request.started;
-    const stage=Math.min(3,Math.floor(passed/hopDuration));
-    if(passed>=4*hopDuration){finishRequest();draw();return;}
-    if(stage!==request.stage){
-      const messages=['Запрос от клиента идёт к прокси…','Прокси передаёт запрос на example.com…','Сайт отправляет ответ прокси…','Прокси возвращает ответ клиенту…'];
-      setRequestStatus(messages[stage],[0,1,2,1][stage]);
-      request.stage=stage;
+    sceneTime=0;
+    scene={node};
+    if(mode===0){
+      scene.routes=others.map((point,i)=>arc(hub,point,.07+(i%4)*.031));
+      const destinations=[['mad','gru','yyz'],['ist','nyc','dxb'],['bom','syd','tyo']][index];
+      scene.featured=destinations.map((key,i)=>arc(hub,cities[key].point,.15+i*.03));
+    }else if(mode===1){
+      scene.rings=[ring(1.14,.45,.5),ring(1.24,.96,1.42)];
+      const pool=[['ist','bom','fra','sin','jnb'],['mad','nyc','dxb','hel','bom'],['hkg','syd','sin','lax','bom']][index];
+      scene.routes=pool.map((key,i)=>arc(hub,cities[key].point,.18+i*.025));
+    }else if(mode===2){
+      const fork=[['nyc','jnb'],['mad','sin'],['lax','mad']][index];
+      const ends=[[['chi','lax','gru'],['ist','dxb','bom']],
+        [['par','nyc','gru'],['hkg','syd','tyo']],
+        [['chi','tyo','syd'],['par','jnb','ist']]][index];
+      scene.branches=fork.map((key,i)=>{
+        const junction=cities[key].point;
+        return {junction,trunk:arc(hub,junction,.11),twigs:ends[i].map(end=>arc(junction,cities[end].point,.035))};
+      });
+    }else if(mode===3){
+      const ends=[['tyo','hkg',[-156,20]],['hel','dxb',[47,16]],['tyo','syd',[127,-15]]][index];
+      const primary=cities[ends[0]].point;
+      const fallback=cities[ends[1]].point;
+      const destination=vector(...ends[2]);
+      scene.breakPoint=primary;
+      scene.primary=[arc(hub,primary,.10,{elbow:true}),arc(primary,destination,.085,{elbow:true})];
+      scene.backup=[arc(hub,fallback,.18,{elbow:true}),arc(fallback,destination,.18,{elbow:true})];
+      const regional=[['lax','tyo','syd','sin','hkg'],['ist','hel','fra','jnb','bom'],['sin','tyo','hkg','syd','bom']][index];
+      scene.guides=regional.map(key=>cities[key].point).filter(point=>point!==fallback)
+        .map(point=>arc(fallback,point,.035,{elbow:true}));
+    }else{
+      const nodes=[['mad','fra','dxb'],['dxb','sin','tyo'],['chi','nyc','mad']][index].map(key=>cities[key].point);
+      scene.chain=[arc(nodes[0],nodes[1],.026),arc(nodes[1],nodes[2],.026)];
+      scene.points=nodes;
     }
-    request.progress=(passed%hopDuration)/hopDuration;
+    root.dataset.scene=keys[mode];
+    root.dataset.node=node.name;
   }
-  sendButton.addEventListener('click',()=>{
-    focusRoute();
-    if(reduced.matches){finishRequest();draw();return;}
-    sendButton.disabled=true;
-    request={started:performance.now(),stage:-1,progress:0};
-    updateRequest(request.started);
+  function nextProxy(){
+    cursor[mode]=(cursor[mode]+1)%presets[mode].length;
+    selectScene();
     draw();
-  });
-  exitSelect.addEventListener('change',selectProxy);
-  showNetwork.addEventListener('change',draw);
-  selectProxy();
+  }
 
   function drawProxyLabel(c,point,width,height,scale,accent){
-    const detail='Прокси · '+proxy.name;
+    const detail='Прокси · '+scene.node.name;
     const titleFont='700 '+(13*scale)+'px system-ui';
     const detailFont='500 '+(10.5*scale)+'px system-ui';
     c.font=detailFont;
-    const labelWidth=Math.max(80*scale,c.measureText(detail).width)+20*scale;
-    const labelHeight=38*scale;
+    const boxWidth=Math.max(80*scale,c.measureText(detail).width)+20*scale;
+    const boxHeight=38*scale;
     const margin=12*scale;
-    let x=margin,y=height-labelHeight-margin;
+    let x=margin,y=height-boxHeight-margin;
     if(point){
-      x=point[0]+labelWidth+17*scale<width-margin?point[0]+17*scale:point[0]-labelWidth-17*scale;
-      x=Math.max(margin,Math.min(width-labelWidth-margin,x));
-      y=Math.max(40*scale,Math.min(height-labelHeight-margin,point[1]-labelHeight-6*scale));
+      x=point[0]+boxWidth+18*scale<width-margin?point[0]+18*scale:point[0]-boxWidth-18*scale;
+      x=Math.max(margin,Math.min(width-boxWidth-margin,x));
+      y=Math.max(42*scale,Math.min(height-boxHeight-margin,point[1]-boxHeight-7*scale));
       c.beginPath();
       c.moveTo(...point);
-      c.lineTo(x>point[0]?x:x+labelWidth,y+labelHeight*.73);
+      c.lineTo(x>point[0]?x:x+boxWidth,y+boxHeight*.73);
       c.strokeStyle=accent;
-      c.lineWidth=1.1*scale;
+      c.lineWidth=1.05*scale;
       c.stroke();
     }
     c.beginPath();
-    c.roundRect(x,y,labelWidth,labelHeight,7*scale);
+    c.roundRect(x,y,boxWidth,boxHeight,7*scale);
     c.fillStyle='#0b1f38';
     c.fill();
     c.strokeStyle=point?accent:'#42678e';
@@ -361,11 +364,13 @@
     c.fillStyle='#cce0f7';
     c.fillText(detail,titleX,y+29*scale);
   }
+
   function drawRoutes(r,width,height,yaw,pitch,scale){
     const c=r.context;
     if(!c)return;
     c.clearRect(0,0,width,height);
     const dark=r.theme==='dark';
+    const accent=colors[mode][Number(dark)];
     const zoom=(mode===1?2.24:2.64)/Math.min(1,width/height*1.12);
     const radius=height/zoom;
     const cosYaw=Math.cos(yaw),sinYaw=Math.sin(yaw);
@@ -375,67 +380,138 @@
       const yawZ=sinYaw*vx+cosYaw*vz;
       const y=cosPitch*vy+sinPitch*yawZ,z=-sinPitch*vy+cosPitch*yawZ;
       const rr=x*x+y*y;
-      if(z<=0||(rr<1&&z<Math.sqrt(1-rr)-.012))return null;
+      if(rr<1&&z<Math.sqrt(1-rr)-.014)return null;
       return [width/2+x*radius,height/2-y*radius];
     }
     function trace(route){
       let connected=false;
       for(const point of route.points){
         const pos=project(point);
-        if(pos) {
+        if(pos){
           if(connected)c.lineTo(...pos);
           else c.moveTo(...pos);
         }
         connected=Boolean(pos);
       }
     }
-    function dot(pos,size,color){
-      if(!pos)return;
+    function stroke(routes,color,weight,dash=[],offset=0){
       c.beginPath();
-      c.arc(...pos,size*scale,0,Math.PI*2);
+      routes.forEach(trace);
+      c.lineWidth=weight*scale;
+      c.strokeStyle=color;
+      c.setLineDash(dash.map(value=>value*scale));
+      c.lineDashOffset=offset*scale;
+      c.stroke();
+      c.setLineDash([]);
+    }
+    function dot(position,size,color){
+      if(!position)return;
+      c.beginPath();
+      c.arc(...position,size*scale,0,Math.PI*2);
       c.fillStyle=color;
       c.fill();
     }
-    if(showNetwork.checked){
-      const networkBlue=dark?'rgba(150,197,255,.54)':'rgba(77,144,242,.61)';
-      const networkTeal=dark?'rgba(119,235,221,.57)':'rgba(25,172,168,.64)';
-      c.lineWidth=(mode===4?1.02:.76)*scale;
-      for(let color=0;color<2;color++){
-        c.beginPath();
-        routes.forEach((route,i)=>{if(Number(i%3===0)===color)trace(route);});
-        c.strokeStyle=color?networkTeal:networkBlue;
-        c.stroke();
-      }
-      for(const node of Object.values(nodes)) dot(project(node.point),1.55,dark?'#adceff':'#75affc');
-      if(mode===4&&settings.playing){
-        for(let i=0;i<routes.length;i+=5) dot(project(routes[i].arc((time*.22+i*.097)%1)),1.65,dark?'#bffbef':'#b5f5f2');
-      }
-    }
-    const blue=dark?'#93c5ff':'#afd6ff';
-    const teal=dark?'#5aebd4':'#64f5d9';
-    requestRoutes.forEach((route,i)=>{
+    function mark(route,progress,color,shape,size){
+      const p=project(route.curve(progress));
+      const q=project(route.curve(Math.min(.999,progress+.018)));
+      if(!p||!q||Math.hypot(q[0]-p[0],q[1]-p[1])<.1)return;
+      c.save();
+      c.translate(...p);
+      c.rotate(Math.atan2(q[1]-p[1],q[0]-p[0]));
+      c.scale(size*scale,size*scale);
+      c.fillStyle=color;
+      c.strokeStyle=color;
+      c.lineWidth=.29;
       c.beginPath();
-      trace(route);
-      c.lineWidth=3.8*scale;
-      c.strokeStyle='rgba(7,24,48,.62)';
-      c.stroke();
-      c.lineWidth=2.1*scale;
-      c.strokeStyle=i?teal:blue;
-      c.stroke();
-    });
-    const selected=project(proxy.point);
-    dot(project(client),3.3,blue);
-    dot(project(site),3.3,teal);
-    drawProxyLabel(c,selected,width,height,scale,teal);
-    dot(selected,7.1,'#0a243a');
-    dot(selected,4.6,teal);
-    if(request&&request.stage>=0){
-      const index=[0,1,1,0][request.stage];
-      const progress=request.stage<2?request.progress:1-request.progress;
-      const packet=project(requestRoutes[index].arc(progress));
-      dot(packet,5.7,'#0a243a');
-      dot(packet,3.6,'#fff');
+      if(shape==='triangle'){
+        c.moveTo(1,0);c.lineTo(-.75,.65);c.lineTo(-.42,0);c.lineTo(-.75,-.65);c.closePath();c.fill();
+      }else if(shape==='diamond'){
+        c.moveTo(1,0);c.lineTo(0,.56);c.lineTo(-1,0);c.lineTo(0,-.56);c.closePath();c.fill();
+      }else if(shape==='chevrons'){
+        c.moveTo(-.87,-.6);c.lineTo(-.25,0);c.lineTo(-.87,.6);
+        c.moveTo(-.12,-.6);c.lineTo(.5,0);c.lineTo(-.12,.6);c.stroke();
+      }else{
+        c.fillRect(-.82,-.29,.52,.58);c.fillRect(-.12,-.29,.93,.58);
+      }
+      c.restore();
     }
+    const phase=(rate,shift=0)=>.06+.88*((sceneTime*rate+shift)%1);
+    const base='rgba(5,20,36,.73)';
+    if(mode===0){
+      stroke(scene.routes,dark?'#79b3ff62':'#4283df82',1.05);
+      stroke(scene.featured,base,6.5);
+      stroke(scene.featured,accent,3.15);
+      scene.featured.forEach((route,i)=>{
+        mark(route,.75,accent,'triangle',7.2);
+        mark(route,phase(.23,i*.27), '#ffffff','triangle',4.2);
+      });
+      for(const route of scene.routes)dot(project(route.curve(1)),1.9,accent);
+    }else if(mode===1){
+      const band=dark?'#f8ba6485':'#bb6b3190';
+      scene.rings.forEach((route,i)=>{
+        stroke([route],band,i?2.1:1.55,i?[2,6]:[19,7],-sceneTime*13);
+        for(let j=0;j<4;j++)mark(route,phase(.075,j/4+i*.11),accent,'diamond',i?7.5:5.2);
+      });
+      stroke(scene.routes,band,1.45,[4,5],-sceneTime*10);
+      const selected=scene.routes[Math.floor(sceneTime*.43)%scene.routes.length];
+      stroke([selected],base,5.5);
+      stroke([selected],accent,2.7,[8,4],-sceneTime*18);
+      mark(selected,.7,accent,'diamond',6.5);
+      mark(selected,phase(.43), '#fff6da','diamond',5.4);
+    }else if(mode===2){
+      const branches=[dark?'#ffabd2':'#ff8fc1',dark?'#c6aefa':'#b19afa'];
+      scene.branches.forEach(({junction,trunk,twigs},i)=>{
+        const tint=branches[i];
+        stroke([trunk],base,8);
+        stroke([trunk],tint,5.5);
+        stroke([trunk],'#302149',1.45);
+        stroke(twigs,base,4.2);
+        stroke(twigs,tint,1.9);
+        dot(project(junction),4.6,tint);
+        mark(trunk,phase(.22,i*.2), '#ffffff','chevrons',6.6);
+        twigs.forEach((route,j)=>mark(route,phase(.19,j*.2),tint,'chevrons',4.3));
+      });
+    }else if(mode===3){
+      const failed=sceneTime%5.7>1.6;
+      const coral=dark?'#ff9c88':'#ff8a78';
+      stroke(scene.guides,dark?'#87d7af75':'#38a77f80',1.3,[1,4]);
+      stroke(scene.primary,base,4.5);
+      stroke(scene.primary,coral,failed?2.2:3.3,[9,6]);
+      stroke(scene.backup,base,6.9);
+      stroke(scene.backup,failed?accent:dark?'#5aa884':'#469974',failed?3.6:2.2,[13,4,2,4],-sceneTime*20);
+      mark(scene.backup[0],.69,accent,'bars',5.7);
+      mark(scene.backup[1],.73,accent,'bars',5.7);
+      const active=failed?scene.backup:scene.primary;
+      const t=phase(.38)*2;
+      mark(active[Math.min(1,Math.floor(t))],t%1,failed?'#defbea':coral,'bars',6);
+      const breaker=project(scene.breakPoint);
+      if(breaker){
+        dot(breaker,8,base);
+        c.beginPath();
+        const [x,y]=breaker,d=4*scale;
+        c.moveTo(x-d,y-d);c.lineTo(x+d,y+d);
+        c.moveTo(x+d,y-d);c.lineTo(x-d,y+d);
+        c.lineWidth=1.8*scale;c.strokeStyle=coral;c.stroke();
+      }
+    }else{
+      stroke(mesh,dark?'#6eecdd69':'#40b5bdb0',.95);
+      for(const city of Object.values(cities))dot(project(city.point),2.1,accent);
+      stroke(scene.chain,base,6.3);
+      stroke(scene.chain,accent,3.5,[2,4],-sceneTime*28);
+      scene.chain.forEach((route,i)=>{
+        mark(route,.74,accent,'chevrons',4.8);
+        dot(project(route.curve(phase(.31,i*.5))),3.3,'#ebfff8');
+      });
+      for(const point of scene.points){
+        const pos=project(point);
+        dot(pos,5.3,base);
+        dot(pos,3.2,accent);
+      }
+    }
+    const selected=project(scene.node.point);
+    drawProxyLabel(c,selected,width,height,scale,accent);
+    dot(selected,7.3,'#09223a');
+    dot(selected,4.8,accent);
   }
   function draw(){
     if(!ready||!visible||document.hidden)return;
@@ -452,15 +528,15 @@
   function tick(now){
     requestAnimationFrame(tick);if(!lastTick)lastTick=now;const dt=Math.min(.08,(now-lastTick)/1000);lastTick=now;
     if(document.hidden||!visible)return;
-    updateRequest(now);
-    if(settings.playing&&!drag){time+=dt*settings.speed;if(!request)angle+=dt*.07*settings.speed;}
-    const moving=settings.playing||request||drag||Math.abs(targets.x-parallax.x)>.0001||Math.abs(targets.y-parallax.y)>.0001;
+    if(playing&&!drag){time+=dt;sceneTime+=dt;angle+=dt*.024;}
+    const moving=playing||drag||Math.abs(targets.x-parallax.x)>.0001||Math.abs(targets.y-parallax.y)>.0001;
     parallax.x+=(targets.x-parallax.x)*.06;parallax.y+=(targets.y-parallax.y)*.06;
     if(moving&&now-lastFrame>=1000/30){lastFrame=now;draw();}
   }
   function image(url){return new Promise((resolve,reject)=>{const img=new Image();img.crossOrigin='anonymous';img.onload=()=>resolve(img);img.onerror=()=>reject(Error('Не удалось загрузить текстуру Земли.'));img.src=url;});}
+  // Earth textures from three.js examples, pinned to release r160.
   const base='https://raw.githubusercontent.com/mrdoob/three.js/r160/examples/textures/planets/';
-  try{renderers.push(makeRenderer('light'),makeRenderer('dark'));syncActive();updatePlay();
+  try{renderers.push(makeRenderer('light'),makeRenderer('dark'));syncActive();
     Promise.all(['earth_atmos_2048.jpg','earth_clouds_1024.png','earth_lights_2048.png'].map(file=>image(base+file))).then(images=>{
       for(const r of renderers){const {gl,uniforms:u}=r;gl.useProgram(r.program);images.forEach((img,i)=>{const texture=gl.createTexture();gl.activeTexture(gl.TEXTURE0+i);gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,img);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.uniform1i([u.uDay,u.uCloud,u.uNight][i],i);});}
        ready=true;status.textContent='';root.dataset.ready='true';draw();
@@ -470,7 +546,7 @@
   new MutationObserver(syncActive).observe(carousel,{subtree:true,attributes:true,attributeFilter:['hidden']});
   new ResizeObserver(draw).observe(root);
   new IntersectionObserver(entries=>{visible=entries.some(e=>e.isIntersecting);if(visible)draw();}).observe(root);
-  if(globalThis.Tweak){const tweak=new Tweak({container:root,onChange:()=>{updatePlay();draw();}});tweak.addSlider(settings,'speed',{label:'Скорость вращения',min:.3,max:2,step:.1});}
+  reduced.addEventListener('change',event=>{playing=!event.matches;draw();});
 })();
 </script>
-<footer><span>Светлая и тёмная темы вращаются синхронно.</span><a href="https://github.com/mrdoob/three.js/tree/r160/examples/textures/planets" target="_blank" rel="noopener noreferrer">Источник текстур Земли</a></footer></main></body></html>
+</main></body></html>
